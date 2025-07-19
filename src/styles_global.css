@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Share+Tech+Mono&display=swap");
+@import "tailwindcss";
+
+/* variables and global classes */
+:root {
+  /* Colors */
+  --bg-color: #000000;
+  --text-color-primary: #dee5e5;
+  --text-color-secondary: #9dc5bb;
+  --color-primary: #17b890;
+  --color-primary-dark: #063328;
+  --color-secondary: #5e807f;
+  --color-accent: #e30b5d;
+}
+
+/* Font styles */
+.font-bitcount {
+  font-family: "Bitcount Grid Double", system-ui;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "slnt" 0, "CRSV" 0.5, "ELSH" 0, "ELXP" 0;
+}
+
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.font-sharetech {
+  font-family: "Share Tech Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Text styles */
+.text-primary {
+  color: var(--text-color-primary);
+}
+
+.text-secondary {
+  color: var(--text-color-secondary);
+}
+
+/* Global styles */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-color);
+
+  font-family: "Share Tech Mono", monospace;
+  font-style: normal;
+  color: var(--text-color-primary);
+}
