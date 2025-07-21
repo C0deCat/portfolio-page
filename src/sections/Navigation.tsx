@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { defaultContainer } from "../stylizers";
 import classNames from "classnames";
+import FoldIcon from "../assets/Fold.svg?react";
 
 const NavigationButton: React.FC<{ onOpen: () => void }> = ({ onOpen }) => {
   const stripeClasses = "w-full h-[4px] bg-(--color-primary)";
@@ -18,8 +19,11 @@ const NavigationButton: React.FC<{ onOpen: () => void }> = ({ onOpen }) => {
 
 const NavigationContent: React.FC<{ onClose: () => void }> = ({ onClose }) => (
   <>
-    <button className="absolute right-px cursor-pointer" onClick={onClose}>
-      X
+    <button
+      className="absolute right-[4px] top-[4px] cursor-pointer"
+      onClick={onClose}
+    >
+      <FoldIcon />
     </button>
     <ul className="flex flex-col text-[24px]/[24px] lowercase p-5 gap-6">
       <li>
@@ -70,7 +74,7 @@ const Navigation: React.FC = () => {
 
   const classes = classNames(
     defaultContainer(),
-    "fixed bottom-[20px] left-[20px] w-min text-secondary"
+    "fixed bottom-[20px] left-[20px] w-min text-secondary z-10"
   );
 
   return <nav className={classes}>{navigationContent}</nav>;

@@ -1,25 +1,28 @@
+import classNames from "classnames";
+import { defaultContainer } from "../stylizers";
+
 const Expertise: React.FC = () => {
+  const block = classNames(defaultContainer());
+
   return (
-    <section id="expertise">
-      <h1>My expertise</h1>
-      <div>
-        <div>
-          <div>Software Engineering</div>
-          <div>
-            JavaScript, TypeScript, Python, C#, Java. OOP or functional - I got
-            it!
-          </div>
+    <section id="experience" className="p-8 flex justify-end">
+      <div className="flex flex-wrap">
+        <div className={block}>
+          <h2>Character Info</h2>
         </div>
-        <div>
-          <div>Front-end Development</div>
-          <div>
-            React, Next.js, Vue.js, Svelte, Tailwind CSS, CSS-in-JS. I have over
-            4 years of experience with frontend.
-          </div>
+        <div className={block}>
+          <h2>Portrait</h2>
         </div>
-        <div>
-          <div>My other little passions</div>
-          <div>I've dabbled in backend development and machine learning.</div>
+        <div className="w-full" />
+        <div className={block}>
+          <h2>Frontend</h2>
+        </div>
+        <div className="w-full" />
+        <div className={block}>
+          <h2>Software Engineer</h2>
+        </div>
+        <div className={block}>
+          <h2>Miscellaneous</h2>
         </div>
       </div>
     </section>
