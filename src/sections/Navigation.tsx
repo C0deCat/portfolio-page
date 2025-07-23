@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import { defaultContainer } from "../stylizers";
 import classNames from "classnames";
 import FoldIcon from "../assets/Fold.svg?react";
@@ -57,6 +63,27 @@ const NavigationContent: React.FC<{ onClose: () => void }> = ({ onClose }) => (
 
 const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        navRef.current &&
+        !navRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const toggleMenu = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -77,7 +104,11 @@ const Navigation: React.FC = () => {
     "fixed bottom-[20px] left-[20px] w-min text-secondary z-10"
   );
 
-  return <nav className={classes}>{navigationContent}</nav>;
+  return (
+    <nav ref={navRef} className={classes}>
+      {navigationContent}
+    </nav>
+  );
 };
 
 export default Navigation;
