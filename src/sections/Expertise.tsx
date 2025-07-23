@@ -15,8 +15,8 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   const block = classNames(defaultContainer(), classname);
   return (
     <div className={block}>
-      <h2 className="uppercase text-[4cqw]">{title}</h2>
-      <p className="text-[3cqw]">{children}</p>
+      <h2 className="uppercase text-xl sm:text-[4cqw]">{title}</h2>
+      <p className="text-base sm:text-[3cqw]">{children}</p>
     </div>
   );
 };
@@ -26,10 +26,14 @@ const Expertise: React.FC = () => {
     <section id="experience" className="p-8 flex justify-end">
       <div
         id="cardWrapper"
-        className="flex flex-col flex-wrap [container-type:inline-size]"
+        className="flex flex-col flex-wrap @container"
         style={{ width: "min(max(40vw,36rem),100vw)" }}
       >
-        <div className="flex flex-wrap items-stretch w-full">
+        <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
+          <DescriptonBlock
+            title="Portrait"
+            classname="aspect-square self-stretch min-h-[200px] grow @md:grow-0"
+          />
           <DescriptonBlock title="Character Info" classname="grow">
             <>
               name: Vladislav S.
@@ -42,10 +46,6 @@ const Expertise: React.FC = () => {
               Solver
             </>
           </DescriptonBlock>
-          <DescriptonBlock
-            title="Portrait"
-            classname="aspect-square self-stretch min-w-[200px] min-h-[200px]"
-          />
         </div>
         <DescriptonBlock title="Frontend" classname="w-full" />
         <div className="flex flex-wrap w-full">
