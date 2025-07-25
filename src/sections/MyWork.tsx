@@ -13,22 +13,29 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   tags,
   image,
 }) => {
-  const cardClasses = classNames(defaultContainer(), "overflow-hidden flex flex-col");
+  const cardClasses = classNames(
+    defaultContainer(),
+    "overflow-hidden flex flex-col basis-3xs"
+  );
 
   return (
     <div className={cardClasses}>
-      <div className="w-full aspect-video overflow-hidden bg-black">
+      <div className="w-full aspect-video overflow-hidden bg-black cursor-pointer">
         <img src={image} alt={title} className="object-cover w-full h-full" />
       </div>
-      <div className="p-4">
-        <h3 className="text-xl text-primary mb-2">{title}</h3>
-        <ul className="flex flex-wrap gap-2 text-secondary text-sm">
+      <div className="p-2">
+        <h3 className="text-xl text-primary">{title}</h3>
+        <ul className="flex flex-wrap gap-2 text-secondary text-sm mb-2">
           {tags.map((tag) => (
-            <li key={tag} className="px-2 py-1 border border-(--color-secondary) rounded">
-              {tag}
+            <li key={tag} className="">
+              #{tag}
             </li>
           ))}
         </ul>
+
+        <button className="text-base underline cursor-pointer">
+          Show project
+        </button>
       </div>
     </div>
   );
@@ -36,8 +43,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
 const MyWork: React.FC = () => {
   return (
-    <section id="work" className="p-8 space-y-4">
-      <h1 className="text-3xl mb-4">My Work</h1>
+    <section
+      id="work"
+      className="p-8 flex flex-wrap gap-12 max-md:justify-center"
+    >
+      <ProjectCard title="Example" tags={["react", "vite"]} image={FoldImage} />
       <ProjectCard title="Example" tags={["react", "vite"]} image={FoldImage} />
     </section>
   );
