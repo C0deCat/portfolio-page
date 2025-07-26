@@ -15,7 +15,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   const cardClasses = classNames(
     defaultContainer(),
-    "overflow-hidden flex flex-col basis-3xs"
+    "overflow-hidden flex flex-col basis-3xs h-fit"
   );
 
   return (
@@ -45,7 +45,7 @@ const MyWork: React.FC = () => {
   return (
     <section
       id="work"
-      className="p-8 flex flex-wrap gap-12 max-md:justify-center"
+      className="p-8 flex flex-wrap gap-12 max-md:justify-center min-h-[100vh]"
     >
       <ProjectCard title="Example" tags={["react", "vite"]} image={FoldImage} />
       <ProjectCard title="Example" tags={["react", "vite"]} image={FoldImage} />
