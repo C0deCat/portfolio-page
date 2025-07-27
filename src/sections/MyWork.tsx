@@ -77,7 +77,154 @@ const MyWork: React.FC = () => {
         content={
           <p>
             This is a placeholder description of the project. Clicking the image
-            or the button opens this modal.
+            or the button opens this modal. This is a placeholder description of
+            the project. Clicking the image or the button opens this modal. This
+            is a placeholder description of the project. Clicking the image or
+            the button opens this modal. This is a placeholder description of
+            the project. Clicking the image or the button opens this modal.This
+            is a placeholder description of the project. Clicking the image or
+            the button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.This is a placeholder description of the
+            project. Clicking the image or the button opens this modal.This is a
+            placeholder description of the project. Clicking the image or the
+            button opens this modal.
           </p>
         }
       />
