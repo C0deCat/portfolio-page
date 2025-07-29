@@ -1,11 +1,8 @@
 import classNames from "classnames";
-import { defaultContainer, unorderedList } from "../stylizers";
-
-interface DescriptonBlockProps {
-  title?: string;
-  classname?: string;
-  children?: React.ReactNode;
-}
+import { defaultContainer } from "../stylizers";
+import { expertiseContent } from "../data/expertise";
+import type { DescriptonBlockProps } from "../types";
+import { useCallback } from "react";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -25,84 +22,60 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   );
 };
 
+const firstRow: DescriptonBlockProps[] = [
+  {
+    title: "Portrait",
+    classname:
+      "aspect-square self-stretch min-h-[200px] grow @md:grow-0 @max-md:border-b-0 @md:border-r-0",
+  },
+  {
+    title: "Character Info",
+    classname: "grow",
+    children: expertiseContent["Character Info"],
+  },
+];
+
+const secondRow: DescriptonBlockProps[] = [
+  {
+    title: "Frontend",
+    classname: "w-full border-t-0 border-b-0",
+    children: expertiseContent.Frontend,
+  },
+];
+
+const thirdRow: DescriptonBlockProps[] = [
+  {
+    title: "Software Engineer",
+    classname: "flex-1 basis-[250px] @max-md:border-b-0 @md:border-r-0",
+    children: expertiseContent["Software Engineer"],
+  },
+  {
+    title: "Miscellaneous",
+    classname: "flex-1 basis-[250px]",
+    children: expertiseContent.Miscellaneous,
+  },
+];
+
 const Expertise: React.FC = () => {
+  const renderBlocks = useCallback(
+    (blocks: DescriptonBlockProps[]) =>
+      blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
+    []
+  );
+
   return (
-    <section id="experience" className="p-8 flex justify-end">
+    <section id="expertise" className="p-8 flex justify-end">
       <div
         id="cardWrapper"
         className="flex flex-col flex-wrap @container"
         style={{ width: "min(max(40vw,36rem),100vw)" }}
       >
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
-          <DescriptonBlock
-            title="Portrait"
-            classname="aspect-square self-stretch min-h-[200px] grow @md:grow-0 @max-md:border-b-0 @md:border-r-0"
-          />
-          <DescriptonBlock title="Character Info" classname="grow">
-            <p>
-              name: Vladislav S.
-              <br />
-              status: Open to work
-              <br />
-              experience: 4+ years
-              <br />
-              titles: Software Engineer, Frontend Developer, Excellent Problem
-              Solver
-            </p>
-          </DescriptonBlock>
+          {renderBlocks(firstRow)}
         </div>
-        <DescriptonBlock
-          title="Frontend"
-          classname="w-full border-t-0 border-b-0"
-        >
-          <>
-            Basics:
-            <ul className={unorderedList}>
-              <li>HTML, CSS, JS, Figma</li>
-            </ul>
-            Frameworks:
-            <ul className={unorderedList}>
-              <li>Vast experience with React + Redux</li>
-              <li>Knowledge of Vue, Angular, Next</li>
-            </ul>
-            Testing:
-            <ul className={unorderedList}>
-              <li>e2e: cypress, storybook</li>
-              <li>unit: jest, react testing library</li>
-            </ul>
-            Others:
-            <ul className={unorderedList}>
-              <li>GraphQL, Tailwind, Docker, Webpack, Vite</li>
-              <li>And so on...</li>
-            </ul>
-          </>
-        </DescriptonBlock>
+        {renderBlocks(secondRow)}
         <div className="flex flex-wrap @md:flex-nowrap w-full">
-          <DescriptonBlock
-            title="Software Engineer"
-            classname="flex-1 basis-[250px] @max-md:border-b-0 @md:border-r-0"
-          >
-            <>
-              Experience in functional and OOP:
-              <ul className={unorderedList}>
-                <li>JavaScript</li>
-                <li>TypeScript</li>
-                <li>Python</li>
-                <li>C#</li>
-                <li>Java</li>
-              </ul>
-            </>
-          </DescriptonBlock>
-          <DescriptonBlock
-            title="Miscellaneous"
-            classname="flex-1 basis-[250px]"
-          >
-            Beside my main focus I'm also have knowledge in:
-            <ul className={unorderedList}>
-              <li>backend development</li>
-              <li>machine learning</li>
-            </ul>
-          </DescriptonBlock>
+          {renderBlocks(thirdRow)}
         </div>
       </div>
     </section>
