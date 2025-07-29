@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
 import type { DescriptonBlockProps } from "../types";
+import { useCallback } from "react";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -20,11 +21,6 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
     </div>
   );
 };
-
-const renderBlocks = (blocks: DescriptonBlockProps[]) =>
-  blocks.map((block, idx) => (
-    <DescriptonBlock key={idx} {...block} />
-  ));
 
 const firstRow: DescriptonBlockProps[] = [
   {
@@ -61,8 +57,14 @@ const thirdRow: DescriptonBlockProps[] = [
 ];
 
 const Expertise: React.FC = () => {
+  const renderBlocks = useCallback(
+    (blocks: DescriptonBlockProps[]) =>
+      blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
+    []
+  );
+
   return (
-    <section id="experience" className="p-8 flex justify-end">
+    <section id="expertise" className="p-8 flex justify-end">
       <div
         id="cardWrapper"
         className="flex flex-col flex-wrap @container"
