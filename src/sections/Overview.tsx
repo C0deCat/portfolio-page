@@ -11,7 +11,9 @@ export const Overview: React.FC = () => {
         <h1 className="text-9xl text-primary text-center uppercase font-bitcount font-[350]">
           Vladislav
           <br />
-          <span className="text-(--color-primary)">S.</span>
+          <span className="text-(--color-primary) after:content-['.'] after:absolute">
+            S
+          </span>
         </h1>
         <h2 className="text-5xl text-primary text-center lowercase w-full">
           software engineer, frontend developer

@@ -11,18 +11,18 @@ const Accordion: React.FC<AccordionProps> = ({ children }) => {
 
   const headerClasses = classNames(
     defaultContainer(),
-    "p-4 flex justify-between items-center",
+    "p-4 flex justify-between items-center cursor-pointer text-xl",
     open && "border-b-0"
   );
 
   const contentClasses = classNames(
     defaultContainer(false),
-    "border-b-4 border-(--color-primary) mt-4 p-4"
+    "border-b-4 border-(--color-primary) mt-4 p-4 text-xl"
   );
 
   return (
-    <div onClick={() => setOpen(!open)} className="cursor-pointer">
-      <div className={headerClasses}>
+    <div>
+      <div onClick={() => setOpen(!open)} className={headerClasses}>
         <div className="flex-1">{children[0]}</div>
         <span className="ml-4">{open ? "-" : "+"}</span>
       </div>

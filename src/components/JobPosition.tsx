@@ -23,12 +23,13 @@ const JobPosition: React.FC<JobPositionProps> = ({
   const header = (
     <div className="flex justify-between w-full">
       <div>
-        {title} | {" "}
+        {title} |{" "}
         <a
           href={site}
           className="underline"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
         >
           {place}
         </a>
@@ -39,9 +40,9 @@ const JobPosition: React.FC<JobPositionProps> = ({
 
   const body = (
     <div>
-      <p className="mb-2">{location}</p>
-      <p className="mb-2">{description}</p>
-      <p>
+      <p className="mb-2 text-secondary">{location}</p>
+      <p className="mb-4">{description}</p>
+      <p className="text-base text-secondary">
         {stack.map((item) => (
           <span key={item} className="mr-2">{`#${item}`}</span>
         ))}
