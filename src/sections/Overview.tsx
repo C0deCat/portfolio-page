@@ -28,8 +28,11 @@ export const Overview: React.FC = () => {
         <div
           ref={titleRef}
           id="portfolio_title"
-          className="flex flex-col items-center whitespace-nowrap w-fit"
-          style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}
+          className="flex flex-col items-center whitespace-nowrap w-fit pr-8 pl-8"
+          style={{
+            transform: `scale(${scale})`,
+            transformOrigin: "top center",
+          }}
         >
           <h2 className="text-5xl text-primary text-center lowercase w-full">
             a tale of

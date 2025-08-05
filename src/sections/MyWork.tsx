@@ -60,7 +60,7 @@ const MyWork: React.FC = () => {
   return (
     <section
       id="work"
-      className="p-8 flex flex-wrap gap-12 max-md:justify-center min-h-[100vh]"
+      className="p-8 flex flex-wrap gap-12 content-start justify-center min-h-[100vh]"
     >
       {projects.map((project) => (
         <ProjectCard key={project.title} {...project} />
