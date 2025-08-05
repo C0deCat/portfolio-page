@@ -4,7 +4,7 @@ export const Overview: React.FC = () => {
       id="overview"
       className="flex flex-col items-center pt-8 pb-8 h-screen justify-between"
     >
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center" id="portfolio_title">
         <h2 className="text-5xl text-primary text-center lowercase w-full">
           a tale of
         </h2>
