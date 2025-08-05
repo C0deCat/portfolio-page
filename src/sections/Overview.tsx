@@ -21,7 +21,9 @@ export const Overview: React.FC = () => {
           and universal problem solver
         </h2>
       </div>
-      <div className="text-5xl text-primary lowercase">Continue</div>
+      <div className="text-5xl text-primary lowercase">
+        <a href="#expertise">Continue</a>
+      </div>
     </section>
   );
 };
