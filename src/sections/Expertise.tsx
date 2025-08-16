@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
 import type { DescriptonBlockProps } from "../types";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -66,7 +66,7 @@ const Expertise: React.FC = () => {
   return (
     <section
       id="expertise"
-      className="p-8 flex min-h-[100vh] justify-end max-sm:pl-0 max-sm:pr-0"
+      className="p-8 flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0"
     >
       <div
         id="cardWrapper"
