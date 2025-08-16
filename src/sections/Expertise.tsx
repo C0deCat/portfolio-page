@@ -66,7 +66,7 @@ const Expertise: React.FC = () => {
   return (
     <section
       id="expertise"
-      className="p-8 flex justify-end max-sm:pl-0 max-sm:pr-0"
+      className="p-8 flex min-h-[100vh] justify-end max-sm:pl-0 max-sm:pr-0"
     >
       <div
         id="cardWrapper"
