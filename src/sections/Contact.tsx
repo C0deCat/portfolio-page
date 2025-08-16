@@ -6,7 +6,7 @@ const Contact: React.FC = () => {
   return (
     <section
       id="contact"
-      className="flex p-8 min-h-[100vh] gap-8 flex-wrap justify-center"
+      className="flex p-8 pb-20 min-h-[100vh] gap-8 flex-wrap justify-center"
     >
       <div className="flex flex-col justify-center basis-lg">
         <div className={classNames(accentContainer, "p-5")}>
