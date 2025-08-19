@@ -2,13 +2,7 @@ import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
 import type { DescriptonBlockProps } from "../types";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
