@@ -2,7 +2,13 @@ import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
 import type { DescriptonBlockProps } from "../types";
-import { useCallback } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -57,21 +63,61 @@ const thirdRow: DescriptonBlockProps[] = [
 ];
 
 const Expertise: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
       blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
     []
   );
 
+  const updateWidth = useCallback(() => {
+    const section = sectionRef.current;
+    const wrapper = wrapperRef.current;
+    if (!section || !wrapper) return;
+
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const minWidth = Math.max(window.innerWidth * 0.4, 36 * rem);
+    const assumedWidth = Math.min(minWidth, window.innerWidth);
+
+    let resultWidth = assumedWidth;
+    console.log(
+      `Initial assumed width: ${resultWidth}px`,
+      "innerWidth:",
+      window.innerWidth
+    );
+    while (assumedWidth < window.innerWidth) {
+      wrapper.style.width = `${resultWidth}px`;
+      const height = section.getBoundingClientRect().height;
+      console.log(`Checking width: ${resultWidth}px, height: ${height}px`);
+      if (height > window.innerHeight) {
+        resultWidth -= 1; // Decrease width until it fits
+      }
+      if (height <= window.innerHeight) {
+        break; // Stop when it fits
+      }
+    }
+
+    wrapper.style.width = `${resultWidth}px`;
+  }, [sectionRef, wrapperRef]);
+
+  useEffect(() => {
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
   return (
     <section
       id="expertise"
-      className="p-8 flex min-h-[100vh] justify-end max-sm:pl-0 max-sm:pr-0"
+      className="p-8 flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0"
+      ref={sectionRef}
     >
       <div
         id="cardWrapper"
         className="flex flex-col flex-wrap @container"
-        style={{ width: "min(max(40vw,36rem),100vw)" }}
+        ref={wrapperRef}
       >
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
           {renderBlocks(firstRow)}
