@@ -76,15 +76,9 @@ const Expertise: React.FC = () => {
     const assumedWidth = Math.min(minWidth, window.innerWidth);
 
     let resultWidth = assumedWidth;
-    console.log(
-      `Initial assumed width: ${resultWidth}px`,
-      "innerWidth:",
-      window.innerWidth
-    );
     while (assumedWidth < window.innerWidth) {
       wrapper.style.width = `${resultWidth}px`;
       const height = section.getBoundingClientRect().height;
-      console.log(`Checking width: ${resultWidth}px, height: ${height}px`);
       if (height > window.innerHeight) {
         resultWidth -= 1; // Decrease width until it fits
       }
