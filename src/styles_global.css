@@ -58,6 +58,13 @@
     conic-gradient(#000 0 0) content-box;
 }
 
+/** image styles */
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 /* Global styles */
 html {
   scroll-behavior: smooth;

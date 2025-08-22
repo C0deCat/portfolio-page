@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import catBonefire from "../assets/cat_bonefire.png";
 
 export const Overview: React.FC = () => {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -50,6 +51,12 @@ export const Overview: React.FC = () => {
             and universal problem solver
           </h2>
         </div>
+      </div>
+      <div className="grow flex justify-center w-full [container-type:size]">
+        <img
+          src={catBonefire}
+          className="pixelated block size-[100cqmin] object-contain"
+        />
       </div>
       <div className="text-5xl text-primary lowercase">
         <a href="#expertise">Continue</a>
