@@ -52,10 +52,13 @@ export const Overview: React.FC = () => {
           </h2>
         </div>
       </div>
-      <div className="grow flex justify-center w-full [container-type:size]">
+      <div className="grow relative flex justify-center w-full [container-type:size]">
         <img
           src={catBonefire}
-          className="pixelated block size-[100cqmin] object-contain"
+          className="pixelated block size-[100cqmin] object-contain relative z-10"
+        />
+        <div
+          className="absolute -z-10 bottom-0 left-1/2 w-[80%] h-[20%] -translate-x-1/2 rounded-full bg-(--color-primary) blur-3xl opacity-70 animate-[glow_3s_ease-in-out_infinite]"
         />
       </div>
       <div className="text-5xl text-primary lowercase">
