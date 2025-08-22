@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 interface LightSourceProps {
   color: string;
@@ -15,11 +15,11 @@ export const LightSource: React.FC<PropsWithChildren<LightSourceProps>> = ({
   const style = {
     left: `${left}%`,
     top: `${top}%`,
-    '--light-color': color,
-  } as React.CSSProperties & { '--light-color': string };
+    "--light-color": color,
+  } as React.CSSProperties & { "--light-color": string };
 
   return (
-    <div className="relative">
+    <div className="relative h-fit">
       {children}
       <span className="light-source" style={style} />
     </div>

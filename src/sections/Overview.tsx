@@ -54,7 +54,7 @@ export const Overview: React.FC = () => {
         </div>
       </div>
       <div className="grow flex justify-center w-full [container-type:size]">
-        <LightSource color="#ff9a00" left={50} top={60}>
+        <LightSource color="#ff9a00" left={74} top={68}>
           <img
             src={catBonefire}
             className="pixelated block size-[100cqmin] object-contain"
