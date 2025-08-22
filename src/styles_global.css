@@ -65,6 +65,31 @@
   image-rendering: crisp-edges;
 }
 
+.light-source {
+  pointer-events: none;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--light-color);
+  animation: fire-flicker 1.5s infinite alternate;
+}
+
+@keyframes fire-flicker {
+  0%,
+  100% {
+    opacity: 0.8;
+    box-shadow: 0 0 30px 15px var(--light-color),
+      0 0 60px 30px var(--light-color), 0 0 120px 30px var(--light-color);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 40px 20px var(--light-color),
+      0 0 80px 40px var(--light-color), 0 0 240px 60px var(--light-color);
+  }
+}
+
 /* Global styles */
 html {
   scroll-behavior: smooth;
