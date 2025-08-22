@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import catBonefire from "../assets/cat_bonefire.png";
+import { LightSource } from "../components/LightSource";
 
 export const Overview: React.FC = () => {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -53,10 +54,12 @@ export const Overview: React.FC = () => {
         </div>
       </div>
       <div className="grow flex justify-center w-full [container-type:size]">
-        <img
-          src={catBonefire}
-          className="pixelated block size-[100cqmin] object-contain"
-        />
+        <LightSource color="#ff9a00" left={50} top={60}>
+          <img
+            src={catBonefire}
+            className="pixelated block size-[100cqmin] object-contain"
+          />
+        </LightSource>
       </div>
       <div className="text-5xl text-primary lowercase">
         <a href="#expertise">Continue</a>
