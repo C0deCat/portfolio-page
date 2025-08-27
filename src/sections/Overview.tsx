@@ -46,10 +46,8 @@ export const Overview: React.FC = () => {
               S
             </span>
           </h1>
-          <h2 className="text-5xl text-primary text-center lowercase w-full">
-            software engineer, frontend developer
-            <br />
-            and universal problem solver
+          <h2 className="text-5xl text-primary text-center lowercase w-full text-wrap">
+            software engineer and frontend developer
           </h2>
         </div>
       </div>
