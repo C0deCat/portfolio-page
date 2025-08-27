@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import catBonefire from "../assets/cat_bonefire.png";
+import catBonefire from "../assets/cat_bonefire.gif";
 import { LightSource } from "../components/LightSource";
 
 export const Overview: React.FC = () => {
