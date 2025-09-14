@@ -1,8 +1,9 @@
+import { useCallback, useEffect, useRef } from "react";
 import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
 import type { DescriptonBlockProps } from "../types";
-import { useCallback, useEffect, useRef } from "react";
+import catScroll from "../assets/cat_with_scroll.png";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -11,7 +12,7 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
 }) => {
   const block = classNames(
     defaultContainer(),
-    "text-base sm:text-[3cqw] pt-2.5 pb-2.5 pr-5 pl-5",
+    "text-base sm:text-[2.75cqw] pt-2.5 pb-2.5 pr-5 pl-5",
     classname
   );
   return (
@@ -57,55 +58,25 @@ const thirdRow: DescriptonBlockProps[] = [
 ];
 
 const Expertise: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
       blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
     []
   );
 
-  const updateWidth = useCallback(() => {
-    const section = sectionRef.current;
-    const wrapper = wrapperRef.current;
-    if (!section || !wrapper) return;
-
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const minWidth = Math.max(window.innerWidth * 0.4, 36 * rem);
-    const assumedWidth = Math.min(minWidth, window.innerWidth);
-
-    let resultWidth = assumedWidth;
-    while (assumedWidth < window.innerWidth) {
-      wrapper.style.width = `${resultWidth}px`;
-      const height = section.getBoundingClientRect().height;
-      if (height > window.innerHeight) {
-        resultWidth -= 1; // Decrease width until it fits
-      }
-      if (height <= window.innerHeight) {
-        break; // Stop when it fits
-      }
-    }
-
-    wrapper.style.width = `${resultWidth}px`;
-  }, [sectionRef, wrapperRef]);
-
-  useEffect(() => {
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
-
   return (
     <section
       id="expertise"
-      className="p-8 flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0"
-      ref={sectionRef}
+      className="p-8 relative flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0"
     >
+      <img
+        src={catScroll}
+        className="absolute pixelated block h-[400px] object-contain left-[32px] bottom-[32px]"
+      />
       <div
         id="cardWrapper"
         className="flex flex-col flex-wrap @container"
-        ref={wrapperRef}
+        style={{ width: "min(max(40vw,36rem),100vw)" }}
       >
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
           {renderBlocks(firstRow)}
