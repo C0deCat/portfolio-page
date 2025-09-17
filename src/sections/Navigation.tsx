@@ -96,7 +96,7 @@ const Navigation: React.FC = () => {
       ) : (
         <NavigationButton onOpen={toggleMenu} />
       ),
-    [isOpen]
+    [isOpen, toggleMenu]
   );
 
   const classes = classNames(
