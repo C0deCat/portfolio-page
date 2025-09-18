@@ -192,7 +192,7 @@ const Expertise: React.FC = () => {
         type="button"
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute bottom-[32px] left-1/4 h-[500px] w-[500px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute bottom-[32px] left-1/4 h-[600px] w-[600px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
         aria-label="Open message"
