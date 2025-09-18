@@ -57,6 +57,11 @@ const thirdRow: DescriptonBlockProps[] = [
     children: expertiseContent.Miscellaneous,
   },
 ];
+// Notes for future features:
+// - При открытии карточки отматывать скролл так, чтобы карточка была в центре экрана
+// - При открытии карточки замораживать прогресс анимации котика
+// - Изменить траекторию котика с прямой на кривую
+// - Добавить анимацию ходьбы котика, которая будет запускаться в моменты передвижения
 
 const Expertise: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -145,7 +150,7 @@ const Expertise: React.FC = () => {
     setIsCardVisible(true);
   }, [hasReachedKitty, isCardVisible]);
 
-  const catStandingTransform = `translate(${progress * maxTranslation.x}px, ${
+  const catStandingTransform = `translate(-${progress * maxTranslation.x}px, ${
     progress * maxTranslation.y
   }px)`;
 
@@ -168,7 +173,7 @@ const Expertise: React.FC = () => {
         type="button"
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute z-10 left-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute z-10 right-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
         style={{
