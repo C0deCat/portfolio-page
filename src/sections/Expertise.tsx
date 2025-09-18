@@ -13,7 +13,7 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
 }) => {
   const block = classNames(
     defaultContainer(),
-    "text-base sm:text-[2.75cqw] pt-2.5 pb-2.5 pr-5 pl-5",
+    "text-base sm:text-[2.65cqw] pt-2.5 pb-2.5 pr-5 pl-5",
     classname
   );
   return (
