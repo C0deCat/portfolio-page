@@ -77,9 +77,20 @@ const Expertise: React.FC = () => {
       }
 
       const rect = sectionRef.current.getBoundingClientRect();
-      const totalDistance = rect.height + window.innerHeight;
-      const rawProgress = (window.innerHeight - rect.top) / totalDistance;
-      const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+      const thresholdDistance = 250;
+      const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
+      const totalDistance =
+        rect.height + window.innerHeight - thresholdDistance;
+
+      const rawProgress =
+        ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
+        2.5;
+      let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+      console.log("progress", { rawProgress, clampedProgress });
+
+      if (distanceIntoViewport < thresholdDistance) {
+        clampedProgress = 0;
+      }
 
       setProgress(clampedProgress);
     };
@@ -102,6 +113,7 @@ const Expertise: React.FC = () => {
       }
 
       const rect = sectionRef.current.getBoundingClientRect();
+      console.log("bounding rect", rect);
       const nextTranslation = {
         x: Math.max(rect.width * 0.45, 220),
         y: Math.max(rect.height * 0.65, 260),
@@ -138,7 +150,7 @@ const Expertise: React.FC = () => {
   }px)`;
 
   const cardWrapperClass = classNames(
-    "flex flex-col flex-wrap @container transition-all duration-500",
+    "flex flex-col flex-wrap @container",
     isCardVisible
       ? "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
       : "hidden"
@@ -156,7 +168,7 @@ const Expertise: React.FC = () => {
         type="button"
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute left-[32px] top-[32px] h-[200px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute z-10 left-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
         style={{
@@ -175,7 +187,7 @@ const Expertise: React.FC = () => {
         type="button"
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute bottom-[32px] left-1/2 h-[260px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute bottom-[32px] left-1/2 h-[400px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
         aria-label="Open message"
