@@ -187,7 +187,7 @@ const Expertise: React.FC = () => {
         type="button"
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute bottom-[32px] left-1/2 h-[400px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute bottom-[32px] left-1/4 h-[500px] w-[500px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
         aria-label="Open message"
@@ -202,7 +202,7 @@ const Expertise: React.FC = () => {
         <button
           type="button"
           onClick={handleOpenRequest}
-          className="absolute left-1/2 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded shadow-lg uppercase tracking-[0.4em] text-sm text-neutral-900 animate-pulse"
+          className="absolute left-1/4 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded shadow-lg uppercase tracking-[0.4em] text-sm text-neutral-900 animate-pulse"
           style={{ bottom: "300px" }}
         >
           Click to open message
