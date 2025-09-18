@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
 import type { DescriptonBlockProps } from "../types";
 import catStanding from "../assets/CatStanding.png";
 import wantedKitty from "../assets/WantedKitty.png";
+import wantedKittyActive from "../assets/WantedKitty_active.png";
+
+const catSize = 150;
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -58,9 +62,7 @@ const thirdRow: DescriptonBlockProps[] = [
   },
 ];
 // Notes for future features:
-// - При открытии карточки отматывать скролл так, чтобы карточка была в центре экрана
-// - При открытии карточки замораживать прогресс анимации котика
-// - Изменить траекторию котика с прямой на кривую
+// - MOBILE OPTIMIZATION: Сделать так, чтобы карточка сразу открывалась на мобильных устройствах
 // - Добавить анимацию ходьбы котика, которая будет запускаться в моменты передвижения
 
 const Expertise: React.FC = () => {
@@ -68,6 +70,8 @@ const Expertise: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [maxTranslation, setMaxTranslation] = useState({ x: 0, y: 0 });
+  const cardWrapperRef = useRef<HTMLDivElement | null>(null);
+  const treeRef = useRef<HTMLButtonElement | null>(null);
 
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
@@ -77,21 +81,20 @@ const Expertise: React.FC = () => {
 
   useEffect(() => {
     const updateProgress = () => {
-      if (!sectionRef.current) {
+      if (!sectionRef.current || isCardVisible) {
         return;
       }
 
       const rect = sectionRef.current.getBoundingClientRect();
-      const thresholdDistance = 250;
+      const thresholdDistance = catSize * 2;
       const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
       const totalDistance =
         rect.height + window.innerHeight - thresholdDistance;
 
       const rawProgress =
         ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
-        2.5;
+        2;
       let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-      console.log("progress", { rawProgress, clampedProgress });
 
       if (distanceIntoViewport < thresholdDistance) {
         clampedProgress = 0;
@@ -99,6 +102,10 @@ const Expertise: React.FC = () => {
 
       setProgress(clampedProgress);
     };
+
+    if (isCardVisible) {
+      return undefined;
+    }
 
     updateProgress();
 
@@ -109,19 +116,20 @@ const Expertise: React.FC = () => {
       window.removeEventListener("scroll", updateProgress);
       window.removeEventListener("resize", updateProgress);
     };
-  }, []);
+  }, [isCardVisible]);
 
   useEffect(() => {
     const updateTranslationLimits = () => {
-      if (!sectionRef.current) {
+      if (!sectionRef.current || !treeRef.current) {
         return;
       }
 
       const rect = sectionRef.current.getBoundingClientRect();
-      console.log("bounding rect", rect);
+      const treeRect = treeRef.current.getBoundingClientRect();
+      const treeOffset = treeRect.left + treeRect.width * 1.3;
       const nextTranslation = {
-        x: Math.max(rect.width * 0.45, 220),
-        y: Math.max(rect.height * 0.65, 260),
+        x: Math.max(rect.width - treeOffset, 220),
+        y: Math.max(rect.height - catSize * 1.4, 260),
       };
 
       setMaxTranslation((prev) =>
@@ -150,9 +158,33 @@ const Expertise: React.FC = () => {
     setIsCardVisible(true);
   }, [hasReachedKitty, isCardVisible]);
 
-  const catStandingTransform = `translate(-${progress * maxTranslation.x}px, ${
-    progress * maxTranslation.y
-  }px)`;
+  const catOffsetPath = useMemo(() => {
+    const { x, y } = maxTranslation;
+
+    if (x === 0 && y === 0) {
+      return 'path("M 0 0")';
+    }
+
+    const controlPointX = -x * 0.4;
+    const controlPointY = y * 1;
+    return `path("M 0 80 Q 0 ${controlPointY} -${x} ${y}")`;
+  }, [maxTranslation]);
+
+  const catMotionStyles = useMemo(() => {
+    const distance = `${Math.min(Math.max(progress, 0), 1) * 100}%`;
+
+    return {
+      offsetPath: catOffsetPath,
+      WebkitOffsetPath: catOffsetPath,
+      offsetDistance: distance,
+      WebkitOffsetDistance: distance,
+      offsetRotate: "0deg",
+      WebkitOffsetRotate: "0deg",
+      transition:
+        "offset-distance 0.1s ease-out, -webkit-offset-distance 0.1s ease-out",
+      transform: `scale(${1 + progress * 0.5})`,
+    } as CSSProperties;
+  }, [catOffsetPath, progress]);
 
   const cardWrapperClass = classNames(
     "flex flex-col flex-wrap @container",
@@ -162,6 +194,29 @@ const Expertise: React.FC = () => {
   );
 
   const showCallToAction = hasReachedKitty && !isCardVisible;
+
+  useEffect(() => {
+    if (!isCardVisible) {
+      return;
+    }
+
+    const scrollToCenter = () => {
+      const card = cardWrapperRef.current;
+
+      if (!card) {
+        return;
+      }
+
+      const rect = card.getBoundingClientRect();
+      const offsetY = rect.top + rect.height / 2 - window.innerHeight / 2;
+
+      window.scrollBy({ top: offsetY, behavior: "smooth" });
+    };
+
+    const frame = window.requestAnimationFrame(scrollToCenter);
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isCardVisible]);
 
   return (
     <section
@@ -176,10 +231,7 @@ const Expertise: React.FC = () => {
           "absolute z-10 right-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
-        style={{
-          transform: catStandingTransform,
-          transition: "transform 0.2s ease-out",
-        }}
+        style={catMotionStyles}
         aria-label="Open message"
       >
         <img
@@ -192,13 +244,14 @@ const Expertise: React.FC = () => {
         type="button"
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute bottom-[32px] left-1/4 h-[600px] w-[600px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute bottom-[32px] left-1/4 h-[600px] w-[541px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
         aria-label="Open message"
+        ref={treeRef}
       >
         <img
-          src={wantedKitty}
+          src={hasReachedKitty ? wantedKittyActive : wantedKitty}
           alt="Wanted kitty poster"
           className="h-full w-auto pixelated pointer-events-none select-none"
         />
@@ -207,15 +260,17 @@ const Expertise: React.FC = () => {
         <button
           type="button"
           onClick={handleOpenRequest}
-          className="absolute left-1/4 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded shadow-lg uppercase tracking-[0.4em] text-sm text-neutral-900 animate-pulse"
-          style={{ bottom: "300px" }}
+          className="absolute left-1/4 -translate-x-1/2 z-10 bg-transparent px-6 py-3 flex flex-col items-center text-[#f4ff00] uppercase text-2xl animate-bounce"
+          style={{ bottom: "350px" }}
         >
-          Click to open message
+          <span>Click to open message</span>
+          <span className="text-2xl leading-none">↓</span>
         </button>
       )}
       <div
         id="cardWrapper"
         className={cardWrapperClass}
+        ref={cardWrapperRef}
         style={{ width: "min(max(40vw,36rem),100vw)" }}
       >
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
