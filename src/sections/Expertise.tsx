@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import type { CSSProperties } from "react";
 import classNames from "classnames";
 import { defaultContainer } from "../stylizers";
 import { expertiseContent } from "../data/expertise";
@@ -68,6 +75,7 @@ const Expertise: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [maxTranslation, setMaxTranslation] = useState({ x: 0, y: 0 });
+  const cardWrapperRef = useRef<HTMLDivElement | null>(null);
 
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
@@ -77,7 +85,7 @@ const Expertise: React.FC = () => {
 
   useEffect(() => {
     const updateProgress = () => {
-      if (!sectionRef.current) {
+      if (!sectionRef.current || isCardVisible) {
         return;
       }
 
@@ -91,7 +99,6 @@ const Expertise: React.FC = () => {
         ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
         2.5;
       let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-      console.log("progress", { rawProgress, clampedProgress });
 
       if (distanceIntoViewport < thresholdDistance) {
         clampedProgress = 0;
@@ -99,6 +106,10 @@ const Expertise: React.FC = () => {
 
       setProgress(clampedProgress);
     };
+
+    if (isCardVisible) {
+      return undefined;
+    }
 
     updateProgress();
 
@@ -109,7 +120,7 @@ const Expertise: React.FC = () => {
       window.removeEventListener("scroll", updateProgress);
       window.removeEventListener("resize", updateProgress);
     };
-  }, []);
+  }, [isCardVisible]);
 
   useEffect(() => {
     const updateTranslationLimits = () => {
@@ -118,7 +129,6 @@ const Expertise: React.FC = () => {
       }
 
       const rect = sectionRef.current.getBoundingClientRect();
-      console.log("bounding rect", rect);
       const nextTranslation = {
         x: Math.max(rect.width * 0.45, 220),
         y: Math.max(rect.height * 0.65, 260),
@@ -150,9 +160,33 @@ const Expertise: React.FC = () => {
     setIsCardVisible(true);
   }, [hasReachedKitty, isCardVisible]);
 
-  const catStandingTransform = `translate(-${progress * maxTranslation.x}px, ${
-    progress * maxTranslation.y
-  }px)`;
+  const catOffsetPath = useMemo(() => {
+    const { x, y } = maxTranslation;
+
+    if (x === 0 && y === 0) {
+      return 'path("M 0 0")';
+    }
+
+    const controlPointX = -x * 0.4;
+    const controlPointY = y * 0.75;
+
+    return `path("M 0 0 Q ${controlPointX} ${controlPointY} -${x} ${y}")`;
+  }, [maxTranslation]);
+
+  const catMotionStyles = useMemo(() => {
+    const distance = `${Math.min(Math.max(progress, 0), 1) * 100}%`;
+
+    return {
+      offsetPath: catOffsetPath,
+      WebkitOffsetPath: catOffsetPath,
+      offsetDistance: distance,
+      WebkitOffsetDistance: distance,
+      offsetRotate: "0deg",
+      WebkitOffsetRotate: "0deg",
+      transition:
+        "offset-distance 0.2s ease-out, -webkit-offset-distance 0.2s ease-out",
+    } as CSSProperties;
+  }, [catOffsetPath, progress]);
 
   const cardWrapperClass = classNames(
     "flex flex-col flex-wrap @container",
@@ -162,6 +196,29 @@ const Expertise: React.FC = () => {
   );
 
   const showCallToAction = hasReachedKitty && !isCardVisible;
+
+  useEffect(() => {
+    if (!isCardVisible) {
+      return;
+    }
+
+    const scrollToCenter = () => {
+      const card = cardWrapperRef.current;
+
+      if (!card) {
+        return;
+      }
+
+      const rect = card.getBoundingClientRect();
+      const offsetY = rect.top + rect.height / 2 - window.innerHeight / 2;
+
+      window.scrollBy({ top: offsetY, behavior: "smooth" });
+    };
+
+    const frame = window.requestAnimationFrame(scrollToCenter);
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isCardVisible]);
 
   return (
     <section
@@ -176,10 +233,7 @@ const Expertise: React.FC = () => {
           "absolute z-10 right-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
           hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
         )}
-        style={{
-          transform: catStandingTransform,
-          transition: "transform 0.2s ease-out",
-        }}
+        style={catMotionStyles}
         aria-label="Open message"
       >
         <img
@@ -216,6 +270,7 @@ const Expertise: React.FC = () => {
       <div
         id="cardWrapper"
         className={cardWrapperClass}
+        ref={cardWrapperRef}
         style={{ width: "min(max(40vw,36rem),100vw)" }}
       >
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
