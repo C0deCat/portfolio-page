@@ -7,6 +7,7 @@ import type { DescriptonBlockProps } from "../types";
 import catStanding from "../assets/CatStanding.png";
 import wantedKitty from "../assets/WantedKitty.png";
 import wantedKittyActive from "../assets/WantedKitty_active.png";
+import CloseIcon from "../assets/Close.svg?react";
 
 const catSize = 150;
 
@@ -68,6 +69,7 @@ const thirdRow: DescriptonBlockProps[] = [
 const Expertise: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [progress, setProgress] = useState(0);
+  const [displayProgress, setDisplayProgress] = useState(0);
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [maxTranslation, setMaxTranslation] = useState({ x: 0, y: 0 });
   const cardWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -119,6 +121,29 @@ const Expertise: React.FC = () => {
   }, [isCardVisible]);
 
   useEffect(() => {
+    let frame: number;
+
+    const smoothProgress = () => {
+      setDisplayProgress((current) => {
+        const diff = progress - current;
+        const step = diff * 0.1;
+
+        if (Math.abs(diff) < 0.001) {
+          return progress;
+        }
+
+        return current + step;
+      });
+
+      frame = window.requestAnimationFrame(smoothProgress);
+    };
+
+    frame = window.requestAnimationFrame(smoothProgress);
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [progress]);
+
+  useEffect(() => {
     const updateTranslationLimits = () => {
       if (!sectionRef.current || !treeRef.current) {
         return;
@@ -165,13 +190,14 @@ const Expertise: React.FC = () => {
       return 'path("M 0 0")';
     }
 
-    const controlPointX = -x * 0.4;
     const controlPointY = y * 1;
     return `path("M 0 80 Q 0 ${controlPointY} -${x} ${y}")`;
   }, [maxTranslation]);
 
   const catMotionStyles = useMemo(() => {
-    const distance = `${Math.min(Math.max(progress, 0), 1) * 100}%`;
+    const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
+    const easedProgress = clampedProgress * clampedProgress;
+    const distance = `${easedProgress * 100}%`;
 
     return {
       offsetPath: catOffsetPath,
@@ -181,10 +207,10 @@ const Expertise: React.FC = () => {
       offsetRotate: "0deg",
       WebkitOffsetRotate: "0deg",
       transition:
-        "offset-distance 0.1s ease-out, -webkit-offset-distance 0.1s ease-out",
-      transform: `scale(${1 + progress * 0.5})`,
+        "offset-distance 0.25s ease-out, -webkit-offset-distance 0.25s ease-out, transform 0.25s ease-out",
+      transform: `scale(${1 + easedProgress * 0.5})`,
     } as CSSProperties;
-  }, [catOffsetPath, progress]);
+  }, [catOffsetPath, displayProgress]);
 
   const cardWrapperClass = classNames(
     "flex flex-col flex-wrap @container",
@@ -192,6 +218,10 @@ const Expertise: React.FC = () => {
       ? "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
       : "hidden"
   );
+
+  const onClose = useCallback(() => {
+    setIsCardVisible(false);
+  }, []);
 
   const showCallToAction = hasReachedKitty && !isCardVisible;
 
@@ -273,6 +303,12 @@ const Expertise: React.FC = () => {
         ref={cardWrapperRef}
         style={{ width: "min(max(40vw,36rem),100vw)" }}
       >
+        <button
+          className="text-3xl leading-none absolute right-[10px] top-[10px] text-(--color-primary) cursor-pointer z-20"
+          onClick={onClose}
+        >
+          <CloseIcon className="h-5 w-5" />
+        </button>
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
           {renderBlocks(firstRow)}
         </div>
