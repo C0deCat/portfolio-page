@@ -29,7 +29,7 @@ const Experience: React.FC = () => {
             site="https://freelance.example"
             date="2019 - 2021"
             location="Moscow, Russia"
-            description="Delivered web solutions for clients across industries."
+            description="Delivered websfs sdf sdf sdf sdfsdfsdfsjfh kjsdhf kjsdhf lskhfkjls hfkljsdhf jklsh kslhf skjlhf skljjfh skljfh skjfh skjlfh skjf hsklf hskljf skfh skljf hskljfh skljfh sklfh skjlfh skjlfh skljfh skljfh ksldfh skljfh sklfh sklfh skfh sfhskjfghs klf hskfh skjfhsklfh sklfhsklfh sklfh sklfh skl fh sklfh skjlfh skljfh skjfh skj hf ksjhf ksljhf kshf slkjhf lkshf klshf skljhf klsf dfsdfsdfsdfsdfsdfsfsfsdfsdfsdf \n sdfsdf sf \n sdfsdfsdfsdfsdfsdf sdfsdfsdfsfsdfs fsfsdfsfsfsdfsfsdfsfsfkjshfkjsdhfjksdhfl kjsfhlksjhflkjsdhflksjdfhlskjdfh s\ns sdfkjsflkjshfkljshfkjl shfsjklhfskjlf hsjkldfhsjkldfh solutions for clients across industries."
             stack={["HTML", "CSS", "JavaScript"]}
           />
         </div>
