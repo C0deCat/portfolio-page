@@ -18,6 +18,8 @@ import CloseIcon from "../assets/Close.svg?react";
 import cobblestoneTile from "../assets/cobllestone_tile.png";
 
 const catSize = 150;
+const CAT_ANCHOR_X = 0.5;
+const CAT_ANCHOR_Y = 0.9;
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -206,8 +208,8 @@ const Expertise: React.FC = () => {
           width: rect.width,
           height: rect.height,
           catOrigin: {
-            x: catRect.left - rect.left,
-            y: catRect.top - rect.top,
+            x: catRect.left - rect.left + catRect.width * CAT_ANCHOR_X,
+            y: catRect.top - rect.top + catRect.height * CAT_ANCHOR_Y,
           },
         };
 
@@ -275,6 +277,8 @@ const Expertise: React.FC = () => {
       WebkitOffsetDistance: distance,
       offsetRotate: "0deg",
       WebkitOffsetRotate: "0deg",
+      offsetAnchor: `${CAT_ANCHOR_X * 100}% ${CAT_ANCHOR_Y * 100}%`,
+      WebkitOffsetAnchor: `${CAT_ANCHOR_X * 100}% ${CAT_ANCHOR_Y * 100}%`,
       transition:
         "offset-distance 0.25s ease-out, -webkit-offset-distance 0.25s ease-out, transform 0.25s ease-out",
       transform: `scale(${1 + easedProgress * 0.5})`,
