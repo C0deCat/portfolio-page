@@ -231,6 +231,12 @@ const Expertise: React.FC = () => {
     const control = { x: 0, y: y * 1 };
     const end = { x: -x, y };
 
+    const normalizeAngle = (angle: number) => {
+      const twoPi = Math.PI * 2;
+      const wrapped = ((angle % twoPi) + twoPi) % twoPi;
+      return wrapped > Math.PI ? wrapped - twoPi : wrapped;
+    };
+
     const getPoint = (t: number) => {
       const oneMinusT = 1 - t;
       const tSquared = t * t;
@@ -308,18 +314,49 @@ const Expertise: React.FC = () => {
     const endScale = 1.35;
 
     const tiles = [];
-    for (let distance = 0; distance <= totalLength; distance += tileStep) {
+    let distance = 0;
+    let accumulatedAngleDelta = 0;
+
+    const firstTangent = getTangent(0);
+    let currentRotation = Math.round(Math.atan2(firstTangent.y, firstTangent.x) / angleStep) * angleStep;
+
+    while (distance <= totalLength) {
       const t = distanceToT(distance);
       const tangent = getTangent(t);
-      const angle = Math.atan2(tangent.y, tangent.x);
-      const quantizedAngle = Math.round(angle / angleStep) * angleStep;
+      const desiredAngle = Math.atan2(tangent.y, tangent.x);
+      const delta = normalizeAngle(desiredAngle - currentRotation);
+      accumulatedAngleDelta += delta;
+
+      let rotationChanged = false;
+      if (Math.abs(accumulatedAngleDelta) >= angleStep) {
+        const steps = Math.trunc(Math.abs(accumulatedAngleDelta) / angleStep);
+        const appliedDelta = Math.sign(accumulatedAngleDelta) * angleStep * steps;
+        currentRotation = normalizeAngle(currentRotation + appliedDelta);
+        accumulatedAngleDelta -= appliedDelta;
+        rotationChanged = true;
+      }
+
       const scale = startScale + (endScale - startScale) * t;
+      const nominalLength = tileSize * scale;
+      let tileLength =
+        Math.max(tileStep, Math.round(nominalLength / tileStep) * tileStep);
+
+      const remaining = totalLength - distance;
+      if (tileLength > remaining && remaining > 0) {
+        tileLength = Math.max(tileStep, Math.round(remaining / tileStep) * tileStep);
+      }
+
+      if (rotationChanged) {
+        tileLength = Math.max(tileStep, tileLength - tileStep);
+      }
 
       tiles.push({
-        offsetDistance: Math.round(distance / tileStep) * tileStep,
-        rotation: quantizedAngle * (180 / Math.PI),
+        offsetDistance: distance,
+        rotation: currentRotation * (180 / Math.PI),
         scale,
       });
+
+      distance += tileLength;
     }
 
     return tiles;
