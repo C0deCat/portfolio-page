@@ -460,7 +460,7 @@ const Expertise: React.FC = () => {
       {roadGeometry && (
         <svg
           aria-hidden
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none p-8"
           width="100%"
           height="100%"
           viewBox={roadGeometry.viewBox}
