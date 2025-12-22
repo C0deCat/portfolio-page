@@ -8,8 +8,23 @@ import catStanding from "../assets/CatStanding.png";
 import wantedKitty from "../assets/WantedKitty.png";
 import wantedKittyActive from "../assets/WantedKitty_active.png";
 import CloseIcon from "../assets/Close.svg?react";
+import cobblestoneTile from "../assets/cobblestone_tile.png";
 
 const catSize = 150;
+const cobblestoneBaseSize = 64;
+const cobblestoneQuantum = cobblestoneBaseSize / 16;
+const quantizeLength = (value: number) =>
+  Math.round(value / cobblestoneQuantum) * cobblestoneQuantum;
+const quantizeAngle = (angle: number) => {
+  const normalized = ((angle % 360) + 360) % 360;
+  const step = 360 / 16;
+  return Math.round(normalized / step) * step;
+};
+type OffsetSupportedStyles = CSSProperties & {
+  WebkitOffsetPath?: string;
+  WebkitOffsetDistance?: string;
+  WebkitOffsetRotate?: string;
+};
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -215,6 +230,119 @@ const Expertise: React.FC = () => {
     return `path("M 0 80 Q 0 ${controlPointY} -${x} ${y}")`;
   }, [maxTranslation]);
 
+  const cobblestoneTiles = useMemo(() => {
+    const { x, y } = maxTranslation;
+    if (x === 0 && y === 0) {
+      return [];
+    }
+
+    const p0 = { x: 0, y: 80 };
+    const p1 = { x: 0, y };
+    const p2 = { x: -x, y };
+
+    const pointAt = (t: number) => {
+      const oneMinusT = 1 - t;
+      const xPos =
+        oneMinusT * oneMinusT * p0.x +
+        2 * oneMinusT * t * p1.x +
+        t * t * p2.x;
+      const yPos =
+        oneMinusT * oneMinusT * p0.y +
+        2 * oneMinusT * t * p1.y +
+        t * t * p2.y;
+      return { x: xPos, y: yPos };
+    };
+
+    const derivativeAt = (t: number) => {
+      const dx =
+        2 * (1 - t) * (p1.x - p0.x) + 2 * t * (p2.x - p1.x);
+      const dy =
+        2 * (1 - t) * (p1.y - p0.y) + 2 * t * (p2.y - p1.y);
+      return { dx, dy };
+    };
+
+    const totalSegments = 200;
+    const samples: { t: number; length: number }[] = [];
+    let accumulatedLength = 0;
+    let previousPoint = pointAt(0);
+
+    for (let i = 1; i <= totalSegments; i += 1) {
+      const t = i / totalSegments;
+      const point = pointAt(t);
+      accumulatedLength += Math.hypot(
+        point.x - previousPoint.x,
+        point.y - previousPoint.y
+      );
+      samples.push({ t, length: accumulatedLength });
+      previousPoint = point;
+    }
+
+    if (accumulatedLength === 0) {
+      return [];
+    }
+
+    const findTForLength = (targetLength: number) => {
+      if (targetLength <= 0) {
+        return 0;
+      }
+
+      const clamped =
+        targetLength > accumulatedLength ? accumulatedLength : targetLength;
+
+      let previousSample = { t: 0, length: 0 };
+      for (const sample of samples) {
+        if (sample.length >= clamped) {
+          const lengthDelta = sample.length - previousSample.length;
+          const tDelta = sample.t - previousSample.t;
+          const ratio =
+            lengthDelta === 0
+              ? 0
+              : (clamped - previousSample.length) / lengthDelta;
+          return previousSample.t + ratio * tDelta;
+        }
+        previousSample = sample;
+      }
+
+      return 1;
+    };
+
+    const tileSpacing = Math.max(
+      quantizeLength(cobblestoneBaseSize * 0.75),
+      cobblestoneQuantum
+    );
+    const tiles = [];
+    for (
+      let distance = 0;
+      distance <= accumulatedLength + tileSpacing;
+      distance += tileSpacing
+    ) {
+      const clampedDistance =
+        distance > accumulatedLength ? accumulatedLength : distance;
+      const quantizedDistance = Math.min(
+        quantizeLength(clampedDistance),
+        accumulatedLength
+      );
+      const t = findTForLength(quantizedDistance);
+      const { dx, dy } = derivativeAt(t);
+      const angle = quantizeAngle((Math.atan2(dy, dx) * 180) / Math.PI);
+      const distanceRatio =
+        accumulatedLength === 0 ? 0 : quantizedDistance / accumulatedLength;
+      const width =
+        cobblestoneBaseSize * 0.5 +
+        distanceRatio * cobblestoneBaseSize * 1.1;
+      const offsetDistance = `${distanceRatio * 100}%`;
+
+      tiles.push({
+        id: `cobblestone-${distance.toFixed(2)}-${angle}`,
+        offsetDistance,
+        rotation: angle,
+        size: width,
+      });
+    }
+
+    return tiles;
+  }, [maxTranslation]);
+
   const catMotionStyles = useMemo(() => {
     const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
     const easedProgress = clampedProgress * clampedProgress;
@@ -315,6 +443,34 @@ const Expertise: React.FC = () => {
         minHeight: sectionMinHeight ? `${sectionMinHeight}px` : undefined,
       }}
     >
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute right-[32px] top-[32px]">
+          {cobblestoneTiles.map((tile) => (
+            <div
+              key={tile.id}
+              aria-hidden
+              className="absolute"
+              style={
+                {
+                  offsetPath: catOffsetPath,
+                  WebkitOffsetPath: catOffsetPath,
+                  offsetDistance: tile.offsetDistance,
+                  WebkitOffsetDistance: tile.offsetDistance,
+                  offsetRotate: `${tile.rotation}deg`,
+                  WebkitOffsetRotate: `${tile.rotation}deg`,
+                  width: `${tile.size}px`,
+                  height: `${tile.size}px`,
+                  transform: "translate(-50%, -50%)",
+                  backgroundImage: `url(${cobblestoneTile})`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  imageRendering: "pixelated",
+                } as OffsetSupportedStyles
+              }
+            />
+          ))}
+        </div>
+      </div>
       <div
         onClick={handleOpenRequest}
         className={classNames(
