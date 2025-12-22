@@ -8,8 +8,13 @@ import catStanding from "../assets/CatStanding.png";
 import wantedKitty from "../assets/WantedKitty.png";
 import wantedKittyActive from "../assets/WantedKitty_active.png";
 import CloseIcon from "../assets/Close.svg?react";
+import cobblestoneTile from "../assets/cobllestone_tile.png";
 
 const catSize = 150;
+const tileSize = 64;
+const tileStep = tileSize / 16;
+const angleQuantizationSteps = 16;
+const angleStep = (Math.PI * 2) / angleQuantizationSteps;
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -215,6 +220,111 @@ const Expertise: React.FC = () => {
     return `path("M 0 80 Q 0 ${controlPointY} -${x} ${y}")`;
   }, [maxTranslation]);
 
+  const roadTiles = useMemo(() => {
+    const { x, y } = maxTranslation;
+
+    if (x === 0 && y === 0) {
+      return [];
+    }
+
+    const start = { x: 0, y: 80 };
+    const control = { x: 0, y: y * 1 };
+    const end = { x: -x, y };
+
+    const getPoint = (t: number) => {
+      const oneMinusT = 1 - t;
+      const tSquared = t * t;
+      const xPos =
+        oneMinusT * oneMinusT * start.x +
+        2 * oneMinusT * t * control.x +
+        tSquared * end.x;
+      const yPos =
+        oneMinusT * oneMinusT * start.y +
+        2 * oneMinusT * t * control.y +
+        tSquared * end.y;
+
+      return { x: xPos, y: yPos };
+    };
+
+    const getTangent = (t: number) => {
+      const xTangent =
+        2 * (1 - t) * (control.x - start.x) + 2 * t * (end.x - control.x);
+      const yTangent =
+        2 * (1 - t) * (control.y - start.y) + 2 * t * (end.y - control.y);
+      return { x: xTangent, y: yTangent };
+    };
+
+    const sampleSegments = 400;
+    const samples: { t: number; length: number; point: { x: number; y: number } }[] =
+      [];
+    let totalLength = 0;
+    let previousPoint = getPoint(0);
+
+    samples.push({ t: 0, length: 0, point: previousPoint });
+
+    for (let i = 1; i <= sampleSegments; i += 1) {
+      const t = i / sampleSegments;
+      const point = getPoint(t);
+      const distance = Math.hypot(point.x - previousPoint.x, point.y - previousPoint.y);
+      totalLength += distance;
+      samples.push({ t, length: totalLength, point });
+      previousPoint = point;
+    }
+
+    if (totalLength === 0) {
+      return [];
+    }
+
+    const distanceToT = (distance: number) => {
+      if (distance <= 0) {
+        return 0;
+      }
+      if (distance >= totalLength) {
+        return 1;
+      }
+
+      let low = 0;
+      let high = samples.length - 1;
+
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        const sample = samples[mid];
+
+        if (sample.length < distance) {
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
+      }
+
+      const after = samples[low];
+      const before = samples[low - 1] ?? samples[0];
+      const segmentLength = after.length - before.length || 1;
+      const segmentProgress = (distance - before.length) / segmentLength;
+      return before.t + (after.t - before.t) * segmentProgress;
+    };
+
+    const startScale = 0.6;
+    const endScale = 1.35;
+
+    const tiles = [];
+    for (let distance = 0; distance <= totalLength; distance += tileStep) {
+      const t = distanceToT(distance);
+      const tangent = getTangent(t);
+      const angle = Math.atan2(tangent.y, tangent.x);
+      const quantizedAngle = Math.round(angle / angleStep) * angleStep;
+      const scale = startScale + (endScale - startScale) * t;
+
+      tiles.push({
+        offsetDistance: Math.round(distance / tileStep) * tileStep,
+        rotation: quantizedAngle * (180 / Math.PI),
+        scale,
+      });
+    }
+
+    return tiles;
+  }, [maxTranslation]);
+
   const catMotionStyles = useMemo(() => {
     const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
     const easedProgress = clampedProgress * clampedProgress;
@@ -315,6 +425,36 @@ const Expertise: React.FC = () => {
         minHeight: sectionMinHeight ? `${sectionMinHeight}px` : undefined,
       }}
     >
+      <div className="absolute inset-0 pointer-events-none select-none" aria-hidden>
+        {roadTiles.map((tile, index) => (
+          <div
+            key={`${tile.offsetDistance}-${index}`}
+            className="absolute"
+            style={{
+              offsetPath: catOffsetPath,
+              WebkitOffsetPath: catOffsetPath,
+              offsetDistance: `${tile.offsetDistance}px`,
+              WebkitOffsetDistance: `${tile.offsetDistance}px`,
+              offsetRotate: `${tile.rotation}deg`,
+              WebkitOffsetRotate: `${tile.rotation}deg`,
+              top: "32px",
+              right: "32px",
+              width: `${tileSize}px`,
+              height: `${tileSize}px`,
+              transform: `translate(-50%, -50%) scale(${tile.scale})`,
+              transformOrigin: "50% 50%",
+              opacity: 0.9,
+            }}
+          >
+            <img
+              src={cobblestoneTile}
+              alt=""
+              className="w-full h-full"
+              draggable={false}
+            />
+          </div>
+        ))}
+      </div>
       <div
         onClick={handleOpenRequest}
         className={classNames(
