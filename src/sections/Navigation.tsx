@@ -71,10 +71,7 @@ const Navigation: React.FC = () => {
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        navRef.current &&
-        !navRef.current.contains(event.target as Node)
-      ) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -101,7 +98,7 @@ const Navigation: React.FC = () => {
 
   const classes = classNames(
     defaultContainer(),
-    "fixed bottom-[20px] left-[20px] w-min text-secondary z-10"
+    "fixed bottom-[20px] left-[20px] w-min text-secondary z-30"
   );
 
   return (
