@@ -76,105 +76,12 @@ const thirdRow: DescriptonBlockProps[] = [
 // - MOBILE OPTIMIZATION: Сделать так, чтобы карточка сразу открывалась на мобильных устройствах
 // - Добавить анимацию ходьбы котика, которая будет запускаться в моменты передвижения
 
-const Expertise: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [displayProgress, setDisplayProgress] = useState(0);
-  const [isCardVisible, setIsCardVisible] = useState(false);
+const useRoadLayout = (
+  sectionRef: React.RefObject<HTMLElement | null>,
+  treeRef: React.RefObject<HTMLButtonElement | null>,
+) => {
   const [maxTranslation, setMaxTranslation] = useState({ x: 0, y: 0 });
   const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [sectionMinHeight, setSectionMinHeight] = useState<number>();
-  const cardWrapperRef = useRef<HTMLDivElement | null>(null);
-  const treeRef = useRef<HTMLButtonElement | null>(null);
-  const [tiles, setTiles] = useState<Tile[]>([]);
-
-  const renderBlocks = useCallback(
-    (blocks: DescriptonBlockProps[]) =>
-      blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
-    [],
-  );
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 48rem)");
-
-    const handleMediaChange = (event: MediaQueryListEvent) => {
-      setIsSmallScreen(event.matches);
-    };
-
-    setIsSmallScreen(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handleMediaChange);
-
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
-  }, []);
-
-  useEffect(() => {
-    if (isSmallScreen) {
-      setIsCardVisible(true);
-    }
-  }, [isSmallScreen]);
-
-  useEffect(() => {
-    const updateProgress = () => {
-      if (!sectionRef.current || isCardVisible) {
-        return;
-      }
-
-      const rect = sectionRef.current.getBoundingClientRect();
-      const thresholdDistance = catSize * 2;
-      const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
-      const totalDistance =
-        rect.height + window.innerHeight - thresholdDistance;
-
-      const rawProgress =
-        ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
-        2;
-      let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-
-      if (distanceIntoViewport < thresholdDistance) {
-        clampedProgress = 0;
-      }
-
-      setProgress(clampedProgress);
-    };
-
-    if (isCardVisible) {
-      return undefined;
-    }
-
-    updateProgress();
-
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
-
-    return () => {
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
-    };
-  }, [isCardVisible]);
-
-  useEffect(() => {
-    let frame: number;
-
-    const smoothProgress = () => {
-      setDisplayProgress((current) => {
-        const diff = progress - current;
-        const step = diff * 0.1;
-
-        if (Math.abs(diff) < 0.001) {
-          return progress;
-        }
-
-        return current + step;
-      });
-
-      frame = window.requestAnimationFrame(smoothProgress);
-    };
-
-    frame = window.requestAnimationFrame(smoothProgress);
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [progress]);
 
   useEffect(() => {
     const updateTranslationLimits = () => {
@@ -213,17 +120,7 @@ const Expertise: React.FC = () => {
     return () => {
       window.removeEventListener("resize", updateTranslationLimits);
     };
-  }, []);
-
-  const hasReachedKitty = progress >= 0.9;
-
-  const handleOpenRequest = useCallback(() => {
-    if (!isSmallScreen && !hasReachedKitty && !isCardVisible) {
-      return;
-    }
-
-    setIsCardVisible(true);
-  }, [hasReachedKitty, isCardVisible, isSmallScreen]);
+  }, [sectionRef, treeRef]);
 
   const catOffsetPath = useMemo(() => {
     const { x, y } = maxTranslation;
@@ -239,7 +136,163 @@ const Expertise: React.FC = () => {
     // Стало (сдвиг вправо на W):
     // M W 80 Q W controlY (W - x) y
     return `M ${W * 1.2} ${H * 0.3} Q ${W} ${controlPointY} ${W - x} ${y}`;
-  }, [maxTranslation]);
+  }, [maxTranslation, svgSize.height, svgSize.width]);
+
+  const tiles = useMemo(() => {
+    const svg = sectionRef.current?.querySelector("svg");
+    const path = svg?.querySelector<SVGPathElement>("#roadPath");
+    if (!svg || !path) return [];
+
+    // Координаты берём в user units SVG (у вас viewBox ~= px, preserveAspectRatio="none")
+    const total = path.getTotalLength();
+
+    // Настройки "перспективы"
+    const widthStart = 150; // узко в начале
+    const widthEnd = 300; // широко в конце
+    const rowStep = 32; // шаг вдоль пути (плотность рядов)
+    const tileGap = 2; // зазор между плитками
+    const tileSize = 20; // базовая сторона квадрата плитки
+
+    const tileScaleStart = 0.6;
+    const tileScaleEnd = 1.0;
+
+    const tileSizeStart = tileSize * tileScaleStart;
+    const tileSizeEnd = tileSize * tileScaleEnd;
+
+    const rowStepStart = rowStep * tileScaleStart;
+    const rowStepEnd = rowStep * tileScaleEnd;
+
+    // Малый дельта-отрезок для tangent
+    const delta = 1.5;
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    const next: Tile[] = [];
+    for (
+      let s = 0;
+      s <= total;
+      s += lerp(rowStepStart, rowStepEnd, s / total)
+    ) {
+      const t = s / total;
+
+      // Точка на осевой линии
+      const p = path.getPointAtLength(s);
+
+      // Точка чуть дальше/раньше для касательной
+      const p1 = path.getPointAtLength(Math.max(0, s - delta));
+      const p2 = path.getPointAtLength(Math.min(total, s + delta));
+
+      const tx = p2.x - p1.x;
+      const ty = p2.y - p1.y;
+
+      const mag = Math.hypot(tx, ty) || 1;
+      const ux = tx / mag;
+      const uy = ty / mag;
+
+      // Нормаль (перпендикуляр вправо)
+      const nx = -uy;
+      const ny = ux;
+
+      const roadW = lerp(widthStart, widthEnd, t);
+
+      // Сколько плиток укладываем поперёк: по сути "колонки"
+      // Делайте tileW так, чтобы их было 3..9 в зависимости от ширины
+      const approxCols = 12;
+      const tileW = lerp(tileSizeStart, tileSizeEnd, t);
+      const tileH = lerp(tileSizeStart, tileSizeEnd, t);
+
+      // Угол плиток по касательной
+      const angle = Math.atan2(uy, ux);
+
+      // Центрируем ряд по ширине: offsets от -roadW/2 до +roadW/2
+      const start = -roadW / 2 + tileW / 2;
+
+      for (let col = 0; col < approxCols; col++) {
+        const offset = start + col * (tileW + tileGap);
+
+        // Позиция центра плитки (вокруг осевой линии)
+        const cx = p.x + nx * offset;
+        const cy = p.y + ny * offset;
+
+        // translate ставит top-left, поэтому сдвигаем на половину размера
+        next.push({
+          key: `${Math.round(s)}:${col}`,
+          x: cx - tileW / 2 + randomInRange(-2, 2, 3),
+          y: cy - tileH / 2 + randomInRange(-2, 2, 3),
+          angle: angle + randomInRange(-0.1, 0.1, 3),
+          w: tileW,
+          h: tileH,
+        });
+      }
+    }
+
+    return next;
+  }, [catOffsetPath, sectionRef, svgSize.height, svgSize.width]);
+
+  return { catOffsetPath, svgSize, tiles };
+};
+
+const useCatMotion = (sectionRef: React.RefObject<HTMLElement | null>) => {
+  const [progress, setProgress] = useState(0);
+  const [displayProgress, setDisplayProgress] = useState(0);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      if (!sectionRef.current) {
+        return;
+      }
+
+      const rect = sectionRef.current.getBoundingClientRect();
+      const thresholdDistance = catSize * 2;
+      const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
+      const totalDistance =
+        rect.height + window.innerHeight - thresholdDistance;
+
+      const rawProgress =
+        ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
+        2;
+      let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+
+      if (distanceIntoViewport < thresholdDistance) {
+        clampedProgress = 0;
+      }
+
+      setProgress(clampedProgress);
+    };
+
+    updateProgress();
+
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, [sectionRef]);
+
+  useEffect(() => {
+    let frame: number;
+
+    const smoothProgress = () => {
+      setDisplayProgress((current) => {
+        const diff = progress - current;
+        const step = diff * 0.1;
+
+        if (Math.abs(diff) < 0.001) {
+          return progress;
+        }
+
+        return current + step;
+      });
+
+      frame = window.requestAnimationFrame(smoothProgress);
+    };
+
+    frame = window.requestAnimationFrame(smoothProgress);
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [progress]);
 
   const catMotionStyles = useMemo(() => {
     const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
@@ -257,7 +310,52 @@ const Expertise: React.FC = () => {
         "offset-distance 0.25s ease-out, -webkit-offset-distance 0.25s ease-out, transform 0.25s ease-out",
       transform: `scale(${1 + easedProgress * 0.5})`,
     } as CSSProperties;
-  }, [catOffsetPath, displayProgress]);
+  }, [displayProgress]);
+
+  const hasReachedKitty = progress >= 0.9;
+
+  return { catMotionStyles, hasReachedKitty };
+};
+
+const useModalCard = (
+  sectionRef: React.RefObject<HTMLElement | null>,
+  hasReachedKitty: boolean,
+) => {
+  const [isCardVisible, setIsCardVisible] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [sectionMinHeight, setSectionMinHeight] = useState<number>();
+  const cardWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 48rem)");
+
+    const handleMediaChange = (event: MediaQueryListEvent) => {
+      setIsSmallScreen(event.matches);
+    };
+
+    setIsSmallScreen(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
+
+  useEffect(() => {
+    if (isSmallScreen) {
+      setIsCardVisible(true);
+    }
+  }, [isSmallScreen]);
+
+  const handleOpenRequest = useCallback(() => {
+    if (!isSmallScreen && !hasReachedKitty && !isCardVisible) {
+      return;
+    }
+
+    setIsCardVisible(true);
+  }, [hasReachedKitty, isCardVisible, isSmallScreen]);
+
+  const onClose = useCallback(() => {
+    setIsCardVisible(false);
+  }, []);
 
   const cardWrapperClass = classNames(
     "flex flex-col flex-wrap @container",
@@ -265,10 +363,6 @@ const Expertise: React.FC = () => {
       ? "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
       : "hidden",
   );
-
-  const onClose = useCallback(() => {
-    setIsCardVisible(false);
-  }, []);
 
   const showCallToAction = hasReachedKitty && !isCardVisible;
 
@@ -330,98 +424,42 @@ const Expertise: React.FC = () => {
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateSectionHeight);
     };
-  }, [isCardVisible, isSmallScreen]);
+  }, [isCardVisible, isSmallScreen, sectionRef]);
 
-  useEffect(() => {
-    const svg = sectionRef.current?.querySelector("svg");
-    const path = svg?.querySelector<SVGPathElement>("#roadPath");
-    if (!svg || !path) return;
+  return {
+    cardWrapperRef,
+    cardWrapperClass,
+    handleOpenRequest,
+    isCardVisible,
+    isSmallScreen,
+    onClose,
+    sectionMinHeight,
+    showCallToAction,
+  };
+};
 
-    // Координаты берём в user units SVG (у вас viewBox ~= px, preserveAspectRatio="none")
-    const total = path.getTotalLength(); // :contentReference[oaicite:3]{index=3}
+const Expertise: React.FC = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const treeRef = useRef<HTMLButtonElement | null>(null);
 
-    // Настройки "перспективы"
-    const widthStart = 150; // узко в начале
-    const widthEnd = 300; // широко в конце
-    const rowStep = 32; // шаг вдоль пути (плотность рядов)
-    const tileGap = 2; // зазор между плитками
-    const tileSize = 20; // базовая сторона квадрата плитки
+  const { catOffsetPath, svgSize, tiles } = useRoadLayout(sectionRef, treeRef);
+  const { catMotionStyles, hasReachedKitty } = useCatMotion(sectionRef);
+  const {
+    cardWrapperRef,
+    cardWrapperClass,
+    handleOpenRequest,
+    isCardVisible,
+    isSmallScreen,
+    onClose,
+    sectionMinHeight,
+    showCallToAction,
+  } = useModalCard(sectionRef, hasReachedKitty);
 
-    const tileScaleStart = 0.6;
-    const tileScaleEnd = 1.0;
-
-    const tileSizeStart = tileSize * tileScaleStart;
-    const tileSizeEnd = tileSize * tileScaleEnd;
-
-    const rowStepStart = rowStep * tileScaleStart;
-    const rowStepEnd = rowStep * tileScaleEnd;
-
-    // Малый дельта-отрезок для tangent
-    const delta = 1.5;
-
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-    const next: Tile[] = [];
-    for (
-      let s = 0;
-      s <= total;
-      s += lerp(rowStepStart, rowStepEnd, s / total)
-    ) {
-      const t = s / total;
-
-      // Точка на осевой линии
-      const p = path.getPointAtLength(s); // :contentReference[oaicite:4]{index=4}
-
-      // Точка чуть дальше/раньше для касательной
-      const p1 = path.getPointAtLength(Math.max(0, s - delta));
-      const p2 = path.getPointAtLength(Math.min(total, s + delta));
-
-      const tx = p2.x - p1.x;
-      const ty = p2.y - p1.y;
-
-      const mag = Math.hypot(tx, ty) || 1;
-      const ux = tx / mag;
-      const uy = ty / mag;
-
-      // Нормаль (перпендикуляр вправо)
-      const nx = -uy;
-      const ny = ux;
-
-      const roadW = lerp(widthStart, widthEnd, t);
-
-      // Сколько плиток укладываем поперёк: по сути "колонки"
-      // Делайте tileW так, чтобы их было 3..9 в зависимости от ширины
-      const approxCols = 12;
-      const tileW = lerp(tileSizeStart, tileSizeEnd, t);
-      const tileH = lerp(tileSizeStart, tileSizeEnd, t);
-
-      // Угол плиток по касательной
-      const angle = Math.atan2(uy, ux);
-
-      // Центрируем ряд по ширине: offsets от -roadW/2 до +roadW/2
-      const start = -roadW / 2 + tileW / 2;
-
-      for (let col = 0; col < approxCols; col++) {
-        const offset = start + col * (tileW + tileGap);
-
-        // Позиция центра плитки (вокруг осевой линии)
-        const cx = p.x + nx * offset;
-        const cy = p.y + ny * offset;
-
-        // translate ставит top-left, поэтому сдвигаем на половину размера
-        next.push({
-          key: `${Math.round(s)}:${col}`,
-          x: cx - tileW / 2 + randomInRange(-2, 2, 3),
-          y: cy - tileH / 2 + randomInRange(-2, 2, 3),
-          angle: angle + randomInRange(-0.1, 0.1, 3),
-          w: tileW,
-          h: tileH,
-        });
-      }
-    }
-
-    setTiles(next);
-  }, [catOffsetPath, svgSize.width, svgSize.height]);
+  const renderBlocks = useCallback(
+    (blocks: DescriptonBlockProps[]) =>
+      blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
+    [],
+  );
 
   return (
     <section
