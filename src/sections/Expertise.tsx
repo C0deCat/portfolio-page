@@ -19,7 +19,7 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   const block = classNames(
     defaultContainer(),
     "text-base sm:text-[2.65cqw] pt-2.5 pb-2.5 pr-5 pl-5",
-    classname
+    classname,
   );
   return (
     <div className={block}>
@@ -72,6 +72,7 @@ const Expertise: React.FC = () => {
   const [displayProgress, setDisplayProgress] = useState(0);
   const [isCardVisible, setIsCardVisible] = useState(false);
   const [maxTranslation, setMaxTranslation] = useState({ x: 0, y: 0 });
+  const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [sectionMinHeight, setSectionMinHeight] = useState<number>();
   const cardWrapperRef = useRef<HTMLDivElement | null>(null);
@@ -80,7 +81,7 @@ const Expertise: React.FC = () => {
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
       blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -172,16 +173,25 @@ const Expertise: React.FC = () => {
 
       const rect = sectionRef.current.getBoundingClientRect();
       const treeRect = treeRef.current.getBoundingClientRect();
+
+      // Размеры SVG/viewBox (в user units)
+      const nextSvgSize = { width: rect.width, height: rect.height };
+      setSvgSize((prev) =>
+        prev.width === nextSvgSize.width && prev.height === nextSvgSize.height
+          ? prev
+          : nextSvgSize,
+      );
+
       const treeOffset = treeRect.left + treeRect.width * 1.3;
       const nextTranslation = {
         x: Math.max(rect.width - treeOffset, 220),
-        y: Math.max(rect.height - catSize * 1.4, 260),
+        y: Math.max(rect.height - catSize, 260),
       };
 
       setMaxTranslation((prev) =>
         prev.x === nextTranslation.x && prev.y === nextTranslation.y
           ? prev
-          : nextTranslation
+          : nextTranslation,
       );
     };
 
@@ -206,13 +216,18 @@ const Expertise: React.FC = () => {
 
   const catOffsetPath = useMemo(() => {
     const { x, y } = maxTranslation;
+    const W = svgSize.width;
+    const H = svgSize.height;
 
-    if (x === 0 && y === 0) {
-      return 'path("M 0 0")';
-    }
+    if (x === 0 && y === 0) return "M 0 0";
+    if (W <= 0) return "M 0 0";
 
     const controlPointY = y * 1;
-    return `path("M 0 80 Q 0 ${controlPointY} -${x} ${y}")`;
+
+    // Было: M 0 80 Q 0 controlY -x y
+    // Стало (сдвиг вправо на W):
+    // M W 80 Q W controlY (W - x) y
+    return `M ${W * 1.2} ${H * 0.3} Q ${W} ${controlPointY} ${W - x} ${y}`;
   }, [maxTranslation]);
 
   const catMotionStyles = useMemo(() => {
@@ -221,8 +236,8 @@ const Expertise: React.FC = () => {
     const distance = `${easedProgress * 100}%`;
 
     return {
-      offsetPath: catOffsetPath,
-      WebkitOffsetPath: catOffsetPath,
+      offsetPath: `url(#roadPath)`,
+      WebkitOffsetPath: `url(#roadPath)`,
       offsetDistance: distance,
       WebkitOffsetDistance: distance,
       offsetRotate: "0deg",
@@ -237,7 +252,7 @@ const Expertise: React.FC = () => {
     "flex flex-col flex-wrap @container",
     isCardVisible
       ? "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-      : "hidden"
+      : "hidden",
   );
 
   const onClose = useCallback(() => {
@@ -310,15 +325,35 @@ const Expertise: React.FC = () => {
     <section
       id="expertise"
       ref={sectionRef}
-      className="p-8 relative flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0"
+      className="p-8 relative flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0 overflow-hidden"
       style={{
         minHeight: sectionMinHeight ? `${sectionMinHeight}px` : undefined,
       }}
     >
+      <svg
+        className="absolute inset-0 pointer-events-none overflow-visible"
+        width="100%"
+        height="100%"
+        preserveAspectRatio="none"
+        viewBox={`0 0 ${svgSize.width || 1} ${svgSize.height || 1}`}
+      >
+        <path
+          id="roadPath"
+          d={catOffsetPath}
+          fill="none"
+          stroke="#00E5FF"
+          strokeWidth={4}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          // Вариант “красивой” линии:
+          strokeDasharray="10 8"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
       <div
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute z-10 right-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400"
+          "absolute z-10 right-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
         )}
         style={catMotionStyles}
       >
@@ -333,7 +368,9 @@ const Expertise: React.FC = () => {
         onClick={handleOpenRequest}
         className={classNames(
           "absolute bottom-[32px] left-1/4 h-[600px] w-[541px] -translate-x-1/2 bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
-          hasReachedKitty || isCardVisible ? "cursor-pointer" : "cursor-default"
+          hasReachedKitty || isCardVisible
+            ? "cursor-pointer"
+            : "cursor-default",
         )}
         aria-label="Open message"
         ref={treeRef}
