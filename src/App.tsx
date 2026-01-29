@@ -1,7 +1,7 @@
 import Scanlines from "./components/Scanlines/Scanlines";
 import Contact from "./sections/Contact";
 import Experience from "./sections/Experience";
-import Expertise from "./sections/Expertise";
+import Expertise from "./sections/Expertise/Expertise";
 import MyWork from "./sections/MyWork";
 import Navigation from "./sections/Navigation";
 import { Overview } from "./sections/Overview";
