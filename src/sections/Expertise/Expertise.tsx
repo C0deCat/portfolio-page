@@ -10,6 +10,8 @@ import wantedKittyActive from "../../assets/WantedKitty_active.png";
 import CloseIcon from "../../assets/Close.svg?react";
 import { randomInRange } from "../../utils/randomInRange";
 import { useTiles } from "./useTiles";
+import { useAnimationProgress } from "./useAnimationProgress";
+import { useAnimationPath } from "./useAnimationPath";
 
 const catSize = 150;
 
@@ -70,15 +72,23 @@ const thirdRow: DescriptonBlockProps[] = [
 
 const Expertise: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [progress, setProgress] = useState(0);
-  const [displayProgress, setDisplayProgress] = useState(0);
   const [isCardVisible, setIsCardVisible] = useState(false);
-  const [maxTranslation, setMaxTranslation] = useState({ x: 0, y: 0 });
-  const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [sectionMinHeight, setSectionMinHeight] = useState<number>();
   const cardWrapperRef = useRef<HTMLDivElement | null>(null);
   const treeRef = useRef<HTMLButtonElement | null>(null);
+
+  const { catOffsetPath, svgSize } = useAnimationPath({
+    sectionRef,
+    treeRef,
+    picSize: catSize,
+  });
+  const { progress, displayProgress } = useAnimationProgress({
+    sectionRef,
+    isCardVisible,
+    picSize: catSize,
+  });
+  const { tilesElems } = useTiles({ sectionRef, svgSize, catOffsetPath });
 
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
@@ -105,107 +115,6 @@ const Expertise: React.FC = () => {
     }
   }, [isSmallScreen]);
 
-  useEffect(() => {
-    const updateProgress = () => {
-      if (!sectionRef.current || isCardVisible) {
-        return;
-      }
-
-      const rect = sectionRef.current.getBoundingClientRect();
-      const thresholdDistance = catSize * 2;
-      const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
-      const totalDistance =
-        rect.height + window.innerHeight - thresholdDistance;
-
-      const rawProgress =
-        ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
-        2;
-      let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-
-      if (distanceIntoViewport < thresholdDistance) {
-        clampedProgress = 0;
-      }
-
-      setProgress(clampedProgress);
-    };
-
-    if (isCardVisible) {
-      return undefined;
-    }
-
-    updateProgress();
-
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
-
-    return () => {
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
-    };
-  }, [isCardVisible]);
-
-  useEffect(() => {
-    let frame: number;
-
-    const smoothProgress = () => {
-      setDisplayProgress((current) => {
-        const diff = progress - current;
-        const step = diff * 0.1;
-
-        if (Math.abs(diff) < 0.001) {
-          return progress;
-        }
-
-        return current + step;
-      });
-
-      frame = window.requestAnimationFrame(smoothProgress);
-    };
-
-    frame = window.requestAnimationFrame(smoothProgress);
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [progress]);
-
-  useEffect(() => {
-    const updateTranslationLimits = () => {
-      if (!sectionRef.current || !treeRef.current) {
-        return;
-      }
-
-      const rect = sectionRef.current.getBoundingClientRect();
-      const treeRect = treeRef.current.getBoundingClientRect();
-
-      // Размеры SVG/viewBox (в user units)
-      const nextSvgSize = { width: rect.width, height: rect.height };
-      setSvgSize((prev) =>
-        prev.width === nextSvgSize.width && prev.height === nextSvgSize.height
-          ? prev
-          : nextSvgSize,
-      );
-
-      const treeOffset = treeRect.left + treeRect.width * 1.3;
-      const nextTranslation = {
-        x: Math.max(rect.width - treeOffset, 220),
-        y: Math.max(rect.height - catSize, 260),
-      };
-
-      setMaxTranslation((prev) =>
-        prev.x === nextTranslation.x && prev.y === nextTranslation.y
-          ? prev
-          : nextTranslation,
-      );
-    };
-
-    updateTranslationLimits();
-
-    window.addEventListener("resize", updateTranslationLimits);
-
-    return () => {
-      window.removeEventListener("resize", updateTranslationLimits);
-    };
-  }, []);
-
   const hasReachedKitty = progress >= 0.9;
 
   const handleOpenRequest = useCallback(() => {
@@ -215,22 +124,6 @@ const Expertise: React.FC = () => {
 
     setIsCardVisible(true);
   }, [hasReachedKitty, isCardVisible, isSmallScreen]);
-
-  const catOffsetPath = useMemo(() => {
-    const { x, y } = maxTranslation;
-    const W = svgSize.width;
-    const H = svgSize.height;
-
-    if (x === 0 && y === 0) return "M 0 0";
-    if (W <= 0) return "M 0 0";
-
-    const controlPointY = y * 1;
-
-    // Было: M 0 80 Q 0 controlY -x y
-    // Стало (сдвиг вправо на W):
-    // M W 80 Q W controlY (W - x) y
-    return `M ${W * 1.2} ${H * 0.3} Q ${W} ${controlPointY} ${W - x} ${y}`;
-  }, [maxTranslation]);
 
   const catMotionStyles = useMemo(() => {
     const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
@@ -322,8 +215,6 @@ const Expertise: React.FC = () => {
       window.removeEventListener("resize", updateSectionHeight);
     };
   }, [isCardVisible, isSmallScreen]);
-
-  const { tilesElems } = useTiles({ sectionRef, svgSize, catOffsetPath });
 
   return (
     <section

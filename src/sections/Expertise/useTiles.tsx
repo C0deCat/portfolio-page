@@ -18,13 +18,13 @@ type TUseTilesProps = {
 };
 
 // Настройки "перспективы"
-const widthStart = 150; // узко в начале
-const widthEnd = 300; // широко в конце
+const widthStart = 140; // узко в начале
+const widthEnd = 280; // широко в конце
 const rowStep = 32; // шаг вдоль пути (плотность рядов)
 const tileGap = 2; // зазор между плитками
 const tileSize = 20; // базовая сторона квадрата плитки
 
-const tileScaleStart = 0.6;
+const tileScaleStart = 0.5;
 const tileScaleEnd = 1.0;
 
 const tileSizeStart = tileSize * tileScaleStart;
@@ -90,7 +90,7 @@ export const useTiles = ({
 
       // Сколько плиток укладываем поперёк: по сути "колонки"
       // Делайте tileW так, чтобы их было 3..9 в зависимости от ширины
-      const approxCols = 12;
+      const approxCols = 8;
       const tileW = lerp(tileSizeStart, tileSizeEnd, t);
       const tileH = lerp(tileSizeStart, tileSizeEnd, t);
 
@@ -113,8 +113,8 @@ export const useTiles = ({
           x: cx - tileW / 2 + randomInRange(-2, 2, 3),
           y: cy - tileH / 2 + randomInRange(-2, 2, 3),
           angle: angle + randomInRange(-0.1, 0.1, 3),
-          w: tileW,
-          h: tileH,
+          w: tileW + randomInRange(-2, 2, 3),
+          h: tileH + randomInRange(-2, 2, 3),
           opacity: tileOpacity,
         });
       }
@@ -130,7 +130,7 @@ export const useTiles = ({
           key={t.key}
           className="absolute rounded-sm"
           style={{
-            backgroundColor: `rgba(255, 166, 0, ${t.opacity.toFixed(2)})`,
+            backgroundColor: `rgba(187, 191, 163, ${t.opacity.toFixed(2)})`,
             width: `${t.w}px`,
             height: `${t.h}px`,
             transformOrigin: "50% 50%",
