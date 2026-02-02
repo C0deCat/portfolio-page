@@ -8,7 +8,6 @@ import catStanding from "../../assets/CatStanding.png";
 import wantedKitty from "../../assets/WantedKitty.png";
 import wantedKittyActive from "../../assets/WantedKitty_active.png";
 import CloseIcon from "../../assets/Close.svg?react";
-import { randomInRange } from "../../utils/randomInRange";
 import { useTiles } from "./useTiles";
 import { useAnimationProgress } from "./useAnimationProgress";
 import { useAnimationPath } from "./useAnimationPath";
@@ -236,7 +235,7 @@ const Expertise: React.FC = () => {
           id="roadPath"
           d={catOffsetPath}
           fill="none"
-          stroke="none"
+          stroke="red"
           strokeWidth={4}
           strokeLinecap="round"
           strokeLinejoin="round"
