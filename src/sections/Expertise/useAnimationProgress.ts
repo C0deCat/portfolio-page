@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type TUseAnimationProgressProps = {
   sectionRef: React.RefObject<HTMLElement | null>;
@@ -14,30 +14,35 @@ export const useAnimationProgress = ({
   const [progress, setProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
 
+  const updateProgress = useCallback(() => {
+    if (!sectionRef.current || isCardVisible) {
+      return;
+    }
+
+    const rect = sectionRef.current.getBoundingClientRect();
+    const thresholdDistance = picSize * 2;
+    const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
+    const totalDistance = rect.height + window.innerHeight - thresholdDistance;
+
+    const rawProgress =
+      ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) * 2;
+    let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
+
+    if (distanceIntoViewport < thresholdDistance) {
+      clampedProgress = 0;
+    }
+
+    // Since the progress value in the function changes only after isCardVisible changes,
+    // this fragment simply freezes progress at 1 if the card has been opened at least once.
+    // This is cheaper than writing a separate useEffect to watch isCardVisible.
+    if (clampedProgress < progress) {
+      clampedProgress = 1;
+    }
+
+    setProgress(clampedProgress);
+  }, [isCardVisible, progress, sectionRef, picSize]);
+
   useEffect(() => {
-    const updateProgress = () => {
-      if (!sectionRef.current || isCardVisible) {
-        return;
-      }
-
-      const rect = sectionRef.current.getBoundingClientRect();
-      const thresholdDistance = picSize * 2;
-      const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
-      const totalDistance =
-        rect.height + window.innerHeight - thresholdDistance;
-
-      const rawProgress =
-        ((window.innerHeight - rect.top - thresholdDistance) / totalDistance) *
-        2;
-      let clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-
-      if (distanceIntoViewport < thresholdDistance) {
-        clampedProgress = 0;
-      }
-
-      setProgress(clampedProgress);
-    };
-
     if (isCardVisible) {
       return undefined;
     }

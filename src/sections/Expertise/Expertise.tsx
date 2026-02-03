@@ -217,6 +217,11 @@ const Expertise: React.FC = () => {
     };
   }, [isCardVisible, isSmallScreen]);
 
+  const blurMaskStyle: CSSProperties = {
+    maskImage: `linear-gradient(to bottom, transparent 0px, black 50px)`,
+    WebkitMaskImage: `linear-gradient(to bottom, transparent 0px, black 50px)`,
+  };
+
   return (
     <section
       id="expertise"
@@ -224,6 +229,7 @@ const Expertise: React.FC = () => {
       className="p-8 relative flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0 overflow-hidden"
       style={{
         minHeight: sectionMinHeight ? `${sectionMinHeight}px` : undefined,
+        ...blurMaskStyle,
       }}
     >
       <svg

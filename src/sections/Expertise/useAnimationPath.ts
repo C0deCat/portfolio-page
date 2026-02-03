@@ -63,9 +63,6 @@ export const useAnimationPath = ({
 
     const controlPointY = y * 1;
 
-    // Было: M 0 80 Q 0 controlY -x y
-    // Стало (сдвиг вправо на W):
-    // M W 80 Q W controlY (W - x) y
     return `M ${W * 1.2} ${H * 0.3} Q ${W} ${controlPointY} ${W - x} ${y}`;
   }, [maxTranslation, svgSize]);
 
