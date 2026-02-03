@@ -10,9 +10,13 @@ type Tree = {
   brightness: number;
   saturation: number;
   opacity: number;
+  zIndex?: number;
 };
 
-type IRowParam = Omit<Tree, "key">;
+type IRowParam = Omit<Tree, "key"> & {
+  xRandomOffset: number;
+  yRandomOffset: number;
+};
 
 export type TUseForestProps = {
   sectionRef: React.RefObject<HTMLElement | null>;
@@ -21,44 +25,52 @@ export type TUseForestProps = {
 };
 
 // Настройки деревьев
-const treeGap = 10; // зазор между деревьями (от центра до центра)
-const treeRowGap = 40; // расстояние между рядами деревьев вдоль пути (плотность рядов)
+const treeGap = 400; // зазор между деревьями (от центра до центра)
+const treeRowGap = 75; // расстояние между рядами деревьев вдоль пути (плотность рядов)
 const treeRowCount = 3; // количество рядов деревьев
-const treeScaleMin = 0.3;
-const treeScaleMax = 0.7;
-const distanceFromPath = 100; // расстояние от края пути до нижней точки первого ряда деревьев
+const treeScaleMin = 2.1;
+const treeScaleMax = 2.5;
+const distanceFromPath = 300; // расстояние от края пути до нижней точки первого ряда деревьев
 const delta = 1.5;
 
 const treeRowParams: IRowParam[] = [
   {
-    x: 6,
-    y: 6,
-    scale: 0.05,
-    brightness: 1.05,
-    saturation: 1.1,
+    x: 150,
+    y: 0,
+    xRandomOffset: 20,
+    yRandomOffset: 20,
+    scale: 0.2,
+    brightness: 1,
+    saturation: 1,
     opacity: 0.95,
   },
   {
-    x: 10,
-    y: 8,
+    x: 0,
+    y: 0,
+    xRandomOffset: 25,
+    yRandomOffset: 25,
     scale: 0.1,
-    brightness: 1,
+    brightness: 0.8,
     saturation: 1,
     opacity: 0.9,
   },
   {
-    x: 14,
-    y: 10,
+    x: 150,
+    y: 0,
+    xRandomOffset: 25,
+    yRandomOffset: 25,
     scale: 0.15,
-    brightness: 0.95,
+    brightness: 0.6,
     saturation: 0.95,
     opacity: 0.85,
   },
   {
-    x: 18,
-    y: 12,
-    scale: 0.2,
-    brightness: 0.9,
+    x: 0,
+    y: 0,
+    xRandomOffset: 16,
+    yRandomOffset: 16,
+    scale: 0.1,
+    brightness: 0.5,
     saturation: 0.9,
     opacity: 0.8,
   },
@@ -91,31 +103,39 @@ export const useForest = ({
         const p1 = path.getPointAtLength(Math.max(0, s - delta));
         const p2 = path.getPointAtLength(Math.min(total, s + delta));
 
-        const tx = p2.x - p1.x;
-        const ty = p2.y - p1.y;
-        const mag = Math.hypot(tx, ty) || 1;
-        const ux = tx / mag;
-        const uy = ty / mag;
-        const nx = -uy;
-        const ny = ux;
+        const tangentX = p2.x - p1.x;
+        const tangentY = p2.y - p1.y;
+        const tangentMagnitude = Math.hypot(tangentX, tangentY) || 1;
+        const unitTangentX = tangentX / tangentMagnitude;
+        const unitTangentY = tangentY / tangentMagnitude;
+        const normalX = -unitTangentY;
+        const normalY = unitTangentX;
 
         const baseScale = randomInRange(treeScaleMin, treeScaleMax, 2);
         const scale = baseScale + rowParam.scale;
 
+        const normalJitter = randomInRange(
+          -rowParam.yRandomOffset,
+          rowParam.yRandomOffset,
+          2,
+        );
+        const tangentJitter = randomInRange(
+          -rowParam.xRandomOffset,
+          rowParam.xRandomOffset,
+          2,
+        );
+        const normalOffset = rowOffset + rowParam.y + normalJitter;
+        const tangentOffset = rowParam.x + tangentJitter;
+
         next.push({
           key: `row-${rowIndex}-tree-${Math.round(s)}`,
-          x:
-            p.x +
-            nx * rowOffset +
-            randomInRange(-rowParam.x, rowParam.x, 2),
-          y:
-            p.y +
-            ny * rowOffset +
-            randomInRange(-rowParam.y, rowParam.y, 2),
+          x: p.x + normalX * normalOffset + unitTangentX * tangentOffset,
+          y: p.y + normalY * normalOffset + unitTangentY * tangentOffset,
           scale,
           brightness: rowParam.brightness,
           saturation: rowParam.saturation,
           opacity: rowParam.opacity,
+          zIndex: treeRowCount + 1 - rowIndex,
         });
       }
     }
@@ -135,6 +155,7 @@ export const useForest = ({
             transform: `translate(${tree.x}px, ${tree.y}px) scale(${tree.scale})`,
             opacity: tree.opacity,
             filter: `brightness(${tree.brightness}) saturate(${tree.saturation})`,
+            zIndex: tree.zIndex,
           }}
         />
       )),

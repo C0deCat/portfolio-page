@@ -11,6 +11,7 @@ import CloseIcon from "../../assets/Close.svg?react";
 import { useTiles } from "./useTiles";
 import { useAnimationProgress } from "./useAnimationProgress";
 import { useAnimationPath } from "./useAnimationPath";
+import { useForest } from "./useForest";
 
 const catSize = 150;
 
@@ -88,6 +89,7 @@ const Expertise: React.FC = () => {
     picSize: catSize,
   });
   const { tilesElems } = useTiles({ sectionRef, svgSize, catOffsetPath });
+  const { forestElems } = useForest({ sectionRef, svgSize, catOffsetPath });
 
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
@@ -246,6 +248,7 @@ const Expertise: React.FC = () => {
       </svg>
       <div className="absolute inset-0 pointer-events-none z-[1]">
         {tilesElems}
+        {forestElems}
       </div>
 
       <div
