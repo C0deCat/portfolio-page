@@ -64,7 +64,7 @@ export const useAnimationProgress = ({
     const smoothProgress = () => {
       setDisplayProgress((current) => {
         const diff = progress - current;
-        const step = diff * 0.1;
+        const step = diff * 0.02;
 
         if (Math.abs(diff) < 0.001) {
           return progress;

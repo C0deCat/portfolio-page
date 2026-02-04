@@ -50,7 +50,7 @@ const JobPosition: React.FC<JobPositionProps> = ({
     </div>
   );
 
-  return <Accordion>{[header, body]}</Accordion>;
+  return <Accordion defaultOpen={true}>{[header, body]}</Accordion>;
 };
 
 export default JobPosition;

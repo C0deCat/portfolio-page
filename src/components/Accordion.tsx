@@ -4,20 +4,24 @@ import { defaultContainer } from "../stylizers";
 
 interface AccordionProps {
   children: [React.ReactNode, React.ReactNode];
+  defaultOpen?: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({ children }) => {
-  const [open, setOpen] = useState(false);
+const Accordion: React.FC<AccordionProps> = ({
+  children,
+  defaultOpen = false,
+}) => {
+  const [open, setOpen] = useState(defaultOpen);
 
   const headerClasses = classNames(
     defaultContainer(),
     "p-4 flex justify-between items-center cursor-pointer text-xl",
-    open && "border-b-0"
+    open && "border-b-0",
   );
 
   const contentClasses = classNames(
     defaultContainer(false),
-    "border-b-4 border-(--color-primary) mt-4 p-4 text-xl"
+    "border-b-4 border-(--color-primary) mt-4 p-4 text-xl",
   );
 
   return (

@@ -138,8 +138,8 @@ const Expertise: React.FC = () => {
       WebkitOffsetDistance: distance,
       offsetRotate: "0deg",
       WebkitOffsetRotate: "0deg",
-      transition:
-        "offset-distance 0.25s ease-out, -webkit-offset-distance 0.25s ease-out, transform 0.25s ease-out",
+      // transition:
+      //   "offset-distance 0.25s ease-out, -webkit-offset-distance 0.25s ease-out, transform 0.25s ease-out",
       transform: `scale(${1 + easedProgress * 0.5})`,
     } as CSSProperties;
   }, [catOffsetPath, displayProgress]);
@@ -243,7 +243,7 @@ const Expertise: React.FC = () => {
           id="roadPath"
           d={catOffsetPath}
           fill="none"
-          stroke="red"
+          stroke="none"
           strokeWidth={4}
           strokeLinecap="round"
           strokeLinejoin="round"
