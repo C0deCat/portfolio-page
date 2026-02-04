@@ -20,7 +20,7 @@ export const useAnimationProgress = ({
     }
 
     const rect = sectionRef.current.getBoundingClientRect();
-    const thresholdDistance = picSize * 2;
+    const thresholdDistance = picSize;
     const distanceIntoViewport = Math.max(0, window.innerHeight - rect.top);
     const totalDistance = rect.height + window.innerHeight - thresholdDistance;
 
