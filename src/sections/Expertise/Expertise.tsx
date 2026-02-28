@@ -132,14 +132,12 @@ const Expertise: React.FC = () => {
     const distance = `${easedProgress * 100}%`;
 
     return {
-      offsetPath: `url(#roadPath)`,
-      WebkitOffsetPath: `url(#roadPath)`,
+      offsetPath: `path('${catOffsetPath}')`,
+      WebkitOffsetPath: `path('${catOffsetPath}')`,
       offsetDistance: distance,
       WebkitOffsetDistance: distance,
       offsetRotate: "0deg",
       WebkitOffsetRotate: "0deg",
-      // transition:
-      //   "offset-distance 0.25s ease-out, -webkit-offset-distance 0.25s ease-out, transform 0.25s ease-out",
       transform: `scale(${1 + easedProgress * 0.5})`,
     } as CSSProperties;
   }, [catOffsetPath, displayProgress]);
@@ -260,7 +258,7 @@ const Expertise: React.FC = () => {
       <div
         onClick={handleOpenRequest}
         className={classNames(
-          "absolute z-10 right-[32px] top-[32px] h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
+          "absolute z-10 top-0 left-0 h-[150px] w-auto bg-transparent border-0 p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400",
         )}
         style={catMotionStyles}
       >

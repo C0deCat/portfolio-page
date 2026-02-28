@@ -8,7 +8,7 @@ export const expertiseContent: Record<string, React.ReactNode> = {
       <br />
       status: Open to work
       <br />
-      experience: 4+ years
+      experience: 5+ years
       <br />
       titles: Software Engineer, Frontend Developer, Excellent Problem Solver
     </p>
@@ -17,11 +17,12 @@ export const expertiseContent: Record<string, React.ReactNode> = {
     <>
       Basics:
       <ul className={unorderedList}>
-        <li>HTML, CSS, JS, Figma</li>
+        <li>TypeScript, HTML, CSS, JS, Python, C#, Java, Figma</li>
       </ul>
-      Frameworks:
+      JS frameworks:
       <ul className={unorderedList}>
-        <li>Vast experience with React + Redux</li>
+        <li>Vast experience with React + Redux or MobX</li>
+        <li>Some experience with Node.js</li>
         <li>Knowledge of Vue, Angular, Next</li>
       </ul>
       Testing:
@@ -31,7 +32,8 @@ export const expertiseContent: Record<string, React.ReactNode> = {
       </ul>
       Others:
       <ul className={unorderedList}>
-        <li>GraphQL, Tailwind, Docker, Webpack, Vite</li>
+        <li>GraphQL, Tailwind, Recharts, Docker, Webpack, Vite</li>
+        <li>Telethon, Milvus, Langchain</li>
         <li>And so on...</li>
       </ul>
     </>
@@ -52,10 +54,9 @@ export const expertiseContent: Record<string, React.ReactNode> = {
     <>
       Beside my main focus I'm also have knowledge in:
       <ul className={unorderedList}>
-        <li>backend development</li>
-        <li>machine learning</li>
+        <li>backend development (Node.js)</li>
+        <li>AI Integration (Milvus, Langchain)</li>
       </ul>
     </>
   ),
 };
-

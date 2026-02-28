@@ -1,5 +1,6 @@
 import React from "react";
 import Accordion from "./Accordion";
+import { unorderedList } from "../stylizers";
 
 interface JobPositionProps {
   title: string;
@@ -7,7 +8,7 @@ interface JobPositionProps {
   site: string;
   date: string;
   location: string;
-  description: string;
+  description: string[];
   stack: string[];
 }
 
@@ -41,7 +42,13 @@ const JobPosition: React.FC<JobPositionProps> = ({
   const body = (
     <div>
       <p className="mb-2 text-secondary">{location}</p>
-      <p className="mb-4">{description}</p>
+      <ul className={unorderedList}>
+        {description.map((item) => (
+          <li key={item} className="mb-2">
+            {item}
+          </li>
+        ))}
+      </ul>
       <p className="text-base text-secondary">
         {stack.map((item) => (
           <span key={item} className="mr-2">{`#${item}`}</span>
