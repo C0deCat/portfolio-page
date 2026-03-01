@@ -26,6 +26,8 @@ const procesetArticle = (
       </p>
     </section>
 
+    <img src={ProcesetImage} alt="Proceset" className="w-full mb-8" />
+
     <section>
       <h4 className="text-3xl">Core Features & Engineering Complexity</h4>
       <ul>
@@ -77,6 +79,12 @@ const foresightArticle = (
       </p>
     </section>
 
+    <img
+      src={ForesightImage}
+      alt="Foresight Analytics Platform"
+      className="w-full mb-8"
+    />
+
     <section className="mb-4">
       <h4 className="text-3xl">Core Features & Engineering Complexity</h4>
       <ul>
@@ -126,6 +134,11 @@ const projectMaryArticle = (
         persistent memory and built-in monetization.
       </p>
     </section>
+    <img
+      src={ProjectMaryImage}
+      alt="Project Mary"
+      className="block mx-auto mb-8 w-[clamp(50%,650px,100%)]"
+    />
     <section className="mb-4">
       <h3 className="text-3xl">Key Architectural Features</h3>
       <p>
