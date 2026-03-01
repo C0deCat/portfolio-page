@@ -11,12 +11,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   image,
   stack,
   content,
+  projectLink,
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const cardClasses = classNames(
     defaultContainer(),
-    "overflow-hidden flex flex-col basis-3xs h-fit"
+    "overflow-hidden flex flex-col basis-3xs h-fit",
   );
 
   return (
@@ -49,6 +50,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           title={title}
           stack={stack}
           content={content}
+          projectLink={projectLink}
           onClose={() => setIsOpen(false)}
         />
       )}

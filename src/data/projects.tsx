@@ -221,6 +221,24 @@ const projectMaryArticle = (
   </>
 );
 
+const myPortfolioSiteArticle = (
+  <>
+    <section className="mb-4">
+      <h3 className="text-3xl">Overview</h3>
+      <p>
+        This is my personal portfolio website, built to showcase my projects and
+        experience.
+      </p>
+    </section>
+    <section>
+      <p>
+        I mean, this thing kind of speak for itself, just feel free to look
+        around :D
+      </p>
+    </section>
+  </>
+);
+
 export const projects: ProjectCardProps[] = [
   {
     title: "Proceset",
@@ -236,6 +254,7 @@ export const projects: ProjectCardProps[] = [
       "Jest",
     ],
     content: procesetArticle,
+    projectLink: "https://infomaximum.ru/product",
   },
   {
     title: "Foresight Analytical Platform",
@@ -251,6 +270,7 @@ export const projects: ProjectCardProps[] = [
       "Java (legacy code)",
     ],
     content: foresightArticle,
+    projectLink: "https://www.fsight.ru/en/platform/",
   },
   {
     title: "Project Mary",
@@ -258,12 +278,14 @@ export const projects: ProjectCardProps[] = [
     image: ProjectMaryImage,
     stack: ["Python", "LangChain", "Milvus", "DeepSeek-R1", "Telegram Bot API"],
     content: projectMaryArticle,
+    projectLink: "https://github.com/C0deCat/project-mary",
   },
   {
     title: "This exact portfolio site",
     tags: ["react", "vite", "tailwind", "typescript"],
     image: PortfolioImage,
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS"],
-    content: <p>Another project description.</p>,
+    content: myPortfolioSiteArticle,
+    projectLink: "https://github.com/C0deCat/portfolio-page",
   },
 ];

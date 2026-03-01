@@ -6,6 +6,7 @@ export interface ProjectCardProps {
   image: string;
   stack: string[];
   content: React.ReactNode;
+  projectLink?: string;
 }
 
 export interface DescriptonBlockProps {
