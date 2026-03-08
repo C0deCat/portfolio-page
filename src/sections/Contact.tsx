@@ -20,29 +20,40 @@ const Contact: React.FC = () => {
         </div>
         <div className="text-2xl text-(--color-accent) p-5">
           <p className="mb-2">smolkin.vlsl@gmail.com</p>
-          <p className="mb-2">@C0deCat</p>
-          <p>Github</p>
+          <p className="mb-2">
+            <a
+              href="https://t.me/C0deCat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              @C0deCat
+            </a>
+          </p>
+          <p>
+            <a
+              href="https://github.com/C0deCat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              Github
+            </a>
+          </p>
         </div>
       </div>
       <div className="flex flex-col justify-center gap-8 basis-xs">
         <Quote
-          text="He is very cool!"
-          author="Mark Marcus"
-          position="Senior Developer at Company"
+          text="A very cool developer who doesn't need supervision"
+          author="Gennady Bikeev"
+          position="Frontend Team Lead at Infomaximum"
         />
       </div>
       <div className="flex flex-col justify-center gap-8 basis-xs">
         <Quote
-          text="This is very big quote, that is likely to take up some space and perhaps even a few rows, this is so much text i don’t know what to do"
-          author="Mark Marcus"
-          position="Senior Developer at Company"
-          textSize="text-xl"
-          textAlign="text-left"
-        />
-        <Quote
-          text="He is very cool!"
-          author="Mark Marcus"
-          position="Senior Developer at Company"
+          text="A very professional developer who was a pleasure to work with"
+          author="Dmitry Tishin"
+          position="Senior Frontend at Gazprombank"
         />
       </div>
     </section>

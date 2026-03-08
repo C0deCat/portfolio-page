@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Scanlines from "./components/Scanlines/Scanlines";
 import Contact from "./sections/Contact";
 import Experience from "./sections/Experience";
@@ -19,10 +20,15 @@ const backgroundImages = [
 ];
 
 function App() {
+  const [crtEnabled, setCrtEnabled] = useState(true);
+
   return (
     <>
-      <Scanlines />
-      <Navigation />
+      <Scanlines enabled={crtEnabled} />
+      <Navigation
+        crtEnabled={crtEnabled}
+        onToggleCrt={() => setCrtEnabled((current) => !current)}
+      />
       <Overview />
       <Expertise />
       <DynamicParallaxBackground
