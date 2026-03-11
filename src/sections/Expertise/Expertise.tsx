@@ -1,18 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties } from "react";
 import classNames from "classnames";
 import { defaultContainer } from "../../stylizers";
-import { expertiseContent } from "../../data/expertise";
 import type { DescriptonBlockProps } from "../../types";
 import catStanding from "../../assets/CatStanding.png";
 import wantedKitty from "../../assets/WantedKitty.png";
 import wantedKittyActive from "../../assets/WantedKitty_active.png";
 import CloseIcon from "../../assets/Close.svg?react";
-import { useAnimationProgress } from "./useAnimationProgress";
-import { useAnimationPath } from "./useAnimationPath";
 import ExpertiseDecorCanvas from "./ExpertiseDecorCanvas";
-
-const catSize = 150;
+import { useExpertise } from "./useExpertise";
 
 const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   title,
@@ -24,6 +18,7 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
     "text-base sm:text-[2.65cqw] pt-2.5 pb-2.5 pr-5 pl-5",
     classname,
   );
+
   return (
     <div className={block}>
       <h2 className="uppercase text-xl sm:text-[4cqw] pt">{title}</h2>
@@ -32,200 +27,34 @@ const DescriptonBlock: React.FC<DescriptonBlockProps> = ({
   );
 };
 
-const firstRow: DescriptonBlockProps[] = [
-  {
-    title: "Portrait",
-    classname:
-      "aspect-square self-stretch min-h-[200px] grow @md:grow-0 @max-md:border-b-0 @md:border-r-0",
-  },
-  {
-    title: "Character Info",
-    classname: "grow",
-    children: expertiseContent["Character Info"],
-  },
-];
-
-const secondRow: DescriptonBlockProps[] = [
-  {
-    title: "Frontend",
-    classname: "w-full border-t-0 border-b-0",
-    children: expertiseContent.Frontend,
-  },
-];
-
-const thirdRow: DescriptonBlockProps[] = [
-  {
-    title: "Software Engineer",
-    classname: "flex-1 basis-[250px] @max-md:border-b-0 @md:border-r-0",
-    children: expertiseContent["Software Engineer"],
-  },
-  {
-    title: "Miscellaneous",
-    classname: "flex-1 basis-[250px]",
-    children: expertiseContent.Miscellaneous,
-  },
-];
 // Notes for future features:
-// - MOBILE OPTIMIZATION: Сделать так, чтобы карточка сразу открывалась на мобильных устройствах
-// - Добавить анимацию ходьбы котика, которая будет запускаться в моменты передвижения
+// - Add a walking animation for the cat while it is moving.
 
 const Expertise: React.FC = () => {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isCardVisible, setIsCardVisible] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [sectionMinHeight, setSectionMinHeight] = useState<number>();
-  const cardWrapperRef = useRef<HTMLDivElement | null>(null);
-  const treeRef = useRef<HTMLButtonElement | null>(null);
-
-  const { catOffsetPath, svgSize } = useAnimationPath({
+  const {
     sectionRef,
+    cardWrapperRef,
     treeRef,
-    picSize: catSize,
-  });
-  const { progress, displayProgress } = useAnimationProgress({
-    sectionRef,
+    sectionStyle,
+    svgSize,
+    catOffsetPath,
+    catMotionStyles,
+    cardWrapperClass,
     isCardVisible,
-    picSize: catSize,
-  });
-
-  const renderBlocks = useCallback(
-    (blocks: DescriptonBlockProps[]) =>
-      blocks.map((block, idx) => <DescriptonBlock key={idx} {...block} />),
-    [],
-  );
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 48rem)");
-
-    const handleMediaChange = (event: MediaQueryListEvent) => {
-      setIsSmallScreen(event.matches);
-    };
-
-    setIsSmallScreen(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handleMediaChange);
-
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
-  }, []);
-
-  useEffect(() => {
-    if (isSmallScreen) {
-      setIsCardVisible(true);
-    }
-  }, [isSmallScreen]);
-
-  const hasReachedKitty = progress >= 0.9;
-
-  const handleOpenRequest = useCallback(() => {
-    if (!isSmallScreen && !hasReachedKitty && !isCardVisible) {
-      return;
-    }
-
-    setIsCardVisible(true);
-  }, [hasReachedKitty, isCardVisible, isSmallScreen]);
-
-  const catMotionStyles = useMemo(() => {
-    const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
-    const easedProgress = clampedProgress * clampedProgress;
-    const distance = `${easedProgress * 100}%`;
-
-    return {
-      offsetPath: `path('${catOffsetPath}')`,
-      WebkitOffsetPath: `path('${catOffsetPath}')`,
-      offsetDistance: distance,
-      WebkitOffsetDistance: distance,
-      offsetRotate: "0deg",
-      WebkitOffsetRotate: "0deg",
-      transform: `scale(${1 + easedProgress * 0.5})`,
-    } as CSSProperties;
-  }, [catOffsetPath, displayProgress]);
-
-  const cardWrapperClass = classNames(
-    "flex flex-col flex-wrap @container",
-    isCardVisible
-      ? "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-      : "hidden",
-  );
-
-  const onClose = useCallback(() => {
-    setIsCardVisible(false);
-  }, []);
-
-  const showCallToAction = hasReachedKitty && !isCardVisible;
-
-  useEffect(() => {
-    if (!isCardVisible) {
-      return;
-    }
-
-    const scrollToCenter = () => {
-      const card = cardWrapperRef.current;
-
-      if (!card) {
-        return;
-      }
-
-      const rect = card.getBoundingClientRect();
-      const offsetY = rect.top + rect.height / 2 - window.innerHeight / 2;
-
-      window.scrollBy({ top: offsetY, behavior: "smooth" });
-    };
-
-    const frame = window.requestAnimationFrame(scrollToCenter);
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [isCardVisible]);
-
-  useEffect(() => {
-    const shouldMeasureHeight = isCardVisible || isSmallScreen;
-
-    if (
-      !shouldMeasureHeight ||
-      !cardWrapperRef.current ||
-      !sectionRef.current
-    ) {
-      setSectionMinHeight(undefined);
-      return;
-    }
-
-    const section = sectionRef.current;
-    const card = cardWrapperRef.current;
-
-    const updateSectionHeight = () => {
-      const cardHeight = card.getBoundingClientRect().height;
-      const computedStyle = window.getComputedStyle(section);
-      const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
-      const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
-
-      const requiredHeight = cardHeight + paddingTop + paddingBottom;
-      setSectionMinHeight(Math.max(window.innerHeight, requiredHeight));
-    };
-
-    updateSectionHeight();
-
-    const resizeObserver = new ResizeObserver(updateSectionHeight);
-    resizeObserver.observe(card);
-    window.addEventListener("resize", updateSectionHeight);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("resize", updateSectionHeight);
-    };
-  }, [isCardVisible, isSmallScreen]);
-
-  const blurMaskStyle: CSSProperties = {
-    maskImage: `linear-gradient(to bottom, transparent 0px, black 50px)`,
-    WebkitMaskImage: `linear-gradient(to bottom, transparent 0px, black 50px)`,
-  };
+    isSmallScreen,
+    hasReachedKitty,
+    showCallToAction,
+    handleOpenRequest,
+    onClose,
+    rows,
+  } = useExpertise();
 
   return (
     <section
       id="expertise"
       ref={sectionRef}
       className="p-8 relative flex min-h-[100vh] justify-end items-end max-sm:pl-0 max-sm:pr-0 overflow-hidden"
-      style={{
-        minHeight: sectionMinHeight ? `${sectionMinHeight}px` : undefined,
-        ...blurMaskStyle,
-      }}
+      style={sectionStyle}
     >
       <svg
         className="absolute inset-0 pointer-events-none overflow-visible"
@@ -292,7 +121,7 @@ const Expertise: React.FC = () => {
           style={{ bottom: "350px" }}
         >
           <span>Click to open message</span>
-          <span className="text-2xl leading-none">↓</span>
+          <span className="text-2xl leading-none">&darr;</span>
         </button>
       )}
       <div
@@ -310,11 +139,17 @@ const Expertise: React.FC = () => {
           </button>
         )}
         <div className="flex flex-wrap @md:flex-nowrap items-stretch w-full">
-          {renderBlocks(firstRow)}
+          {rows.first.map((block, idx) => (
+            <DescriptonBlock key={idx} {...block} />
+          ))}
         </div>
-        {renderBlocks(secondRow)}
+        {rows.second.map((block, idx) => (
+          <DescriptonBlock key={idx} {...block} />
+        ))}
         <div className="flex flex-wrap @md:flex-nowrap w-full">
-          {renderBlocks(thirdRow)}
+          {rows.third.map((block, idx) => (
+            <DescriptonBlock key={idx} {...block} />
+          ))}
         </div>
       </div>
     </section>
