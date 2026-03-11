@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type TUseAnimationProgressProps = {
   sectionRef: React.RefObject<HTMLElement | null>;
@@ -13,9 +13,26 @@ export const useAnimationProgress = ({
 }: TUseAnimationProgressProps) => {
   const [progress, setProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
+  const progressRef = useRef(0);
+  const displayProgressRef = useRef(0);
+  const hasOpenedCardRef = useRef(false);
+  const measureFrameRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+
+  const setProgressValue = useCallback((nextProgress: number) => {
+    progressRef.current = nextProgress;
+    setProgress((current) =>
+      current === nextProgress ? current : nextProgress
+    );
+  }, []);
 
   const updateProgress = useCallback(() => {
-    if (!sectionRef.current || isCardVisible) {
+    if (!sectionRef.current) {
+      return;
+    }
+
+    if (isCardVisible || hasOpenedCardRef.current) {
+      setProgressValue(1);
       return;
     }
 
@@ -32,53 +49,96 @@ export const useAnimationProgress = ({
       clampedProgress = 0;
     }
 
-    // Since the progress value in the function changes only after isCardVisible changes,
-    // this fragment simply freezes progress at 1 if the card has been opened at least once.
-    // This is cheaper than writing a separate useEffect to watch isCardVisible.
-    if (clampedProgress < progress) {
-      clampedProgress = 1;
-    }
-
-    setProgress(clampedProgress);
-  }, [isCardVisible, progress, sectionRef, picSize]);
+    setProgressValue(clampedProgress);
+  }, [isCardVisible, sectionRef, picSize, setProgressValue]);
 
   useEffect(() => {
     if (isCardVisible) {
-      return undefined;
+      hasOpenedCardRef.current = true;
     }
-
-    updateProgress();
-
-    window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
-
-    return () => {
-      window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
-    };
   }, [isCardVisible]);
 
   useEffect(() => {
-    let frame: number;
+    const scheduleUpdate = () => {
+      if (measureFrameRef.current !== null) {
+        return;
+      }
 
-    const smoothProgress = () => {
-      setDisplayProgress((current) => {
-        const diff = progress - current;
-        const step = diff * 0.02;
-
-        if (Math.abs(diff) < 0.001) {
-          return progress;
-        }
-
-        return current + step;
+      measureFrameRef.current = window.requestAnimationFrame(() => {
+        measureFrameRef.current = null;
+        updateProgress();
       });
-
-      frame = window.requestAnimationFrame(smoothProgress);
     };
 
-    frame = window.requestAnimationFrame(smoothProgress);
+    if (isCardVisible) {
+      updateProgress();
 
-    return () => window.cancelAnimationFrame(frame);
+      return () => {
+        if (measureFrameRef.current !== null) {
+          window.cancelAnimationFrame(measureFrameRef.current);
+          measureFrameRef.current = null;
+        }
+      };
+    }
+
+    scheduleUpdate();
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+
+      if (measureFrameRef.current !== null) {
+        window.cancelAnimationFrame(measureFrameRef.current);
+        measureFrameRef.current = null;
+      }
+    };
+  }, [isCardVisible, updateProgress]);
+
+  useEffect(() => {
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    const targetProgress = progressRef.current;
+    const currentDisplayProgress = displayProgressRef.current;
+
+    if (Math.abs(targetProgress - currentDisplayProgress) < 0.001) {
+      displayProgressRef.current = targetProgress;
+      setDisplayProgress((current) =>
+        current === targetProgress ? current : targetProgress
+      );
+      return undefined;
+    }
+
+    const smoothProgress = () => {
+      const diff = targetProgress - displayProgressRef.current;
+
+      if (Math.abs(diff) < 0.001) {
+        displayProgressRef.current = targetProgress;
+        setDisplayProgress(targetProgress);
+        animationFrameRef.current = null;
+        return;
+      }
+
+      const nextProgress = displayProgressRef.current + diff * 0.02;
+      displayProgressRef.current = nextProgress;
+      setDisplayProgress(nextProgress);
+
+      animationFrameRef.current = window.requestAnimationFrame(smoothProgress);
+    };
+
+    animationFrameRef.current = window.requestAnimationFrame(smoothProgress);
+
+    return () => {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
   }, [progress]);
 
   return { progress, displayProgress };

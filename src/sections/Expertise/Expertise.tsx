@@ -8,10 +8,9 @@ import catStanding from "../../assets/CatStanding.png";
 import wantedKitty from "../../assets/WantedKitty.png";
 import wantedKittyActive from "../../assets/WantedKitty_active.png";
 import CloseIcon from "../../assets/Close.svg?react";
-import { useTiles } from "./useTiles";
 import { useAnimationProgress } from "./useAnimationProgress";
 import { useAnimationPath } from "./useAnimationPath";
-import { useForest } from "./useForest";
+import ExpertiseDecorCanvas from "./ExpertiseDecorCanvas";
 
 const catSize = 150;
 
@@ -88,8 +87,6 @@ const Expertise: React.FC = () => {
     isCardVisible,
     picSize: catSize,
   });
-  const { tilesElems } = useTiles({ sectionRef, svgSize, catOffsetPath });
-  const { forestElems } = useForest({ sectionRef, svgSize, catOffsetPath });
 
   const renderBlocks = useCallback(
     (blocks: DescriptonBlockProps[]) =>
@@ -250,10 +247,11 @@ const Expertise: React.FC = () => {
           vectorEffect="non-scaling-stroke"
         />
       </svg>
-      <div className="absolute inset-0 pointer-events-none z-[1]">
-        {tilesElems}
-        {forestElems}
-      </div>
+      <ExpertiseDecorCanvas
+        sectionRef={sectionRef}
+        svgSize={svgSize}
+        catOffsetPath={catOffsetPath}
+      />
 
       <div
         onClick={handleOpenRequest}

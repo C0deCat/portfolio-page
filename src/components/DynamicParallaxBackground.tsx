@@ -111,11 +111,12 @@ const DynamicParallaxBackground: React.FC<DynamicParallaxBackgroundProps> = ({
   children,
 }) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const layerRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const parallaxFrameRef = useRef<number | null>(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 0
   );
-  const [parallaxOffset, setParallaxOffset] = useState(0);
   const [loadedImages, setLoadedImages] = useState<LoadedImageMeta[]>([]);
   const [positions, setPositions] = useState<PositionedImage[]>([]);
 
@@ -153,17 +154,6 @@ const DynamicParallaxBackground: React.FC<DynamicParallaxBackgroundProps> = ({
     }
 
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setParallaxOffset(window.scrollY);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const loadImages = useCallback(async () => {
@@ -340,10 +330,58 @@ const DynamicParallaxBackground: React.FC<DynamicParallaxBackgroundProps> = ({
   }, [imageSizeValue, scatterValue, images]);
 
   const parallaxLoopHeight = Math.max(containerSize.height, 1);
-  const rawOffset = parallaxOffset * speed;
-  const loopOffset =
-    ((rawOffset % parallaxLoopHeight) + parallaxLoopHeight) %
-    parallaxLoopHeight;
+
+  const updateLayerTransforms = useCallback(() => {
+    const loopHeight = Math.max(containerSize.height, 1);
+    const rawOffset = window.scrollY * speed;
+    const loopOffset =
+      ((rawOffset % loopHeight) + loopHeight) % loopHeight;
+
+    layerRefs.current.forEach((layer, index) => {
+      if (!layer) {
+        return;
+      }
+
+      const offset = index * loopHeight;
+      const nextTransform = `translate3d(0, ${-loopOffset + offset}px, 0)`;
+
+      if (layer.style.transform !== nextTransform) {
+        layer.style.transform = nextTransform;
+      }
+    });
+  }, [containerSize.height, speed]);
+
+  const scheduleLayerTransformUpdate = useCallback(() => {
+    if (parallaxFrameRef.current !== null) {
+      return;
+    }
+
+    parallaxFrameRef.current = window.requestAnimationFrame(() => {
+      parallaxFrameRef.current = null;
+      updateLayerTransforms();
+    });
+  }, [updateLayerTransforms]);
+
+  useEffect(() => {
+    updateLayerTransforms();
+  }, [positions, updateLayerTransforms]);
+
+  useEffect(() => {
+    scheduleLayerTransformUpdate();
+
+    window.addEventListener("scroll", scheduleLayerTransformUpdate, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", scheduleLayerTransformUpdate);
+
+      if (parallaxFrameRef.current !== null) {
+        window.cancelAnimationFrame(parallaxFrameRef.current);
+        parallaxFrameRef.current = null;
+      }
+    };
+  }, [scheduleLayerTransformUpdate]);
 
   const blurMaskStyle = edgeBlur
     ? {
@@ -359,12 +397,12 @@ const DynamicParallaxBackground: React.FC<DynamicParallaxBackgroundProps> = ({
         className="pointer-events-none absolute inset-0 z-0"
         style={blurMaskStyle}
       >
-        {[0, parallaxLoopHeight].map((offset) => (
+        {[0, parallaxLoopHeight].map((offset, index) => (
           <div
             key={offset}
             className="absolute inset-0"
-            style={{
-              transform: `translate3d(0, ${-loopOffset + offset}px, 0)`,
+            ref={(element) => {
+              layerRefs.current[index] = element;
             }}
           >
             {positions.map((position) => (
