@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import treeSrc from "../../assets/tree.png";
-import { randomInRange } from "../../utils/randomInRange";
+import treeSrc from "../../../../assets/tree.png";
+import { randomInRange } from "../../../../utils/randomInRange";
 
 type Tile = {
   x: number;

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import catStanding from "../../assets/CatStanding.png";
+import catStanding from "../../../../assets/CatStanding.png";
 import ExpertiseDecorCanvas from "./ExpertiseDecorCanvas";
 import { useWalkingKittyAnimation } from "./useWalkingKittyAnimation";
 

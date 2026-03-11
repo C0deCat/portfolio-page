@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { defaultContainer } from "../../stylizers";
-import type { DescriptonBlockProps } from "../../types";
-import CloseIcon from "../../assets/Close.svg?react";
+import { defaultContainer } from "../../../../stylizers";
+import type { DescriptonBlockProps } from "../../../../types";
+import CloseIcon from "../../../../assets/Close.svg?react";
 import { useCharacterCard } from "./useCharacterCard";
 
 type CharacterCardProps = {

@@ -1,5 +1,5 @@
-import wantedKitty from "../../assets/WantedKitty.png";
-import wantedKittyActive from "../../assets/WantedKitty_active.png";
+import wantedKitty from "../../../../assets/WantedKitty.png";
+import wantedKittyActive from "../../../../assets/WantedKitty_active.png";
 import { useWanterPosterTree } from "./useWanterPosterTree";
 
 type WanterPosterTreeProps = {

@@ -1,6 +1,6 @@
-import CharacterCard from "./CharacterCard";
-import WalkingKittyAnimation from "./WalkingKittyAnimation";
-import WanterPosterTree from "./WanterPosterTree";
+import CharacterCard from "./components/CharacterCard";
+import WalkingKittyAnimation from "./components/WalkingKittyAnimation";
+import WanterPosterTree from "./components/WanterPosterTree";
 import { useExpertise } from "./useExpertise";
 
 // Notes for future features:

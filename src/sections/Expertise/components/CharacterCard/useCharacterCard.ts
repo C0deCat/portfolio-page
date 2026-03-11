@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import classNames from "classnames";
-import { expertiseContent } from "../../data/expertise";
-import type { DescriptonBlockProps } from "../../types";
+import { expertiseContent } from "../../../../data/expertise";
+import type { DescriptonBlockProps } from "../../../../types";
 
 type UseCharacterCardProps = {
   cardWrapperRef: React.RefObject<HTMLDivElement | null>;
