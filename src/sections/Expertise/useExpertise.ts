@@ -1,46 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import classNames from "classnames";
-import { expertiseContent } from "../../data/expertise";
-import type { DescriptonBlockProps } from "../../types";
 import { useAnimationProgress } from "./useAnimationProgress";
-import { useAnimationPath } from "./useAnimationPath";
 
 const catSize = 150;
-
-const firstRow: DescriptonBlockProps[] = [
-  {
-    title: "Portrait",
-    classname:
-      "aspect-square self-stretch min-h-[200px] grow @md:grow-0 @max-md:border-b-0 @md:border-r-0",
-  },
-  {
-    title: "Character Info",
-    classname: "grow",
-    children: expertiseContent["Character Info"],
-  },
-];
-
-const secondRow: DescriptonBlockProps[] = [
-  {
-    title: "Frontend",
-    classname: "w-full border-t-0 border-b-0",
-    children: expertiseContent.Frontend,
-  },
-];
-
-const thirdRow: DescriptonBlockProps[] = [
-  {
-    title: "Software Engineer",
-    classname: "flex-1 basis-[250px] @max-md:border-b-0 @md:border-r-0",
-    children: expertiseContent["Software Engineer"],
-  },
-  {
-    title: "Miscellaneous",
-    classname: "flex-1 basis-[250px]",
-    children: expertiseContent.Miscellaneous,
-  },
-];
 
 export const useExpertise = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -50,12 +12,7 @@ export const useExpertise = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [sectionMinHeight, setSectionMinHeight] = useState<number>();
 
-  const { catOffsetPath, svgSize } = useAnimationPath({
-    sectionRef,
-    treeRef,
-    picSize: catSize,
-  });
-  const { progress, displayProgress } = useAnimationProgress({
+  const { progress } = useAnimationProgress({
     sectionRef,
     isCardVisible,
     picSize: catSize,
@@ -95,52 +52,6 @@ export const useExpertise = () => {
     setIsCardVisible(false);
   }, []);
 
-  const catMotionStyles = useMemo(() => {
-    const clampedProgress = Math.min(Math.max(displayProgress, 0), 1);
-    const easedProgress = clampedProgress * clampedProgress;
-    const distance = `${easedProgress * 100}%`;
-
-    return {
-      offsetPath: `path('${catOffsetPath}')`,
-      WebkitOffsetPath: `path('${catOffsetPath}')`,
-      offsetDistance: distance,
-      WebkitOffsetDistance: distance,
-      offsetRotate: "0deg",
-      WebkitOffsetRotate: "0deg",
-      transform: `scale(${1 + easedProgress * 0.5})`,
-    } as CSSProperties;
-  }, [catOffsetPath, displayProgress]);
-
-  const cardWrapperClass = classNames(
-    "flex flex-col flex-wrap @container",
-    isCardVisible
-      ? "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-      : "hidden",
-  );
-
-  useEffect(() => {
-    if (!isCardVisible) {
-      return;
-    }
-
-    const scrollToCenter = () => {
-      const card = cardWrapperRef.current;
-
-      if (!card) {
-        return;
-      }
-
-      const rect = card.getBoundingClientRect();
-      const offsetY = rect.top + rect.height / 2 - window.innerHeight / 2;
-
-      window.scrollBy({ top: offsetY, behavior: "smooth" });
-    };
-
-    const frame = window.requestAnimationFrame(scrollToCenter);
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [isCardVisible]);
-
   useEffect(() => {
     const shouldMeasureHeight = isCardVisible || isSmallScreen;
 
@@ -161,8 +72,8 @@ export const useExpertise = () => {
       const computedStyle = window.getComputedStyle(section);
       const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
       const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
-
       const requiredHeight = cardHeight + paddingTop + paddingBottom;
+
       setSectionMinHeight(Math.max(window.innerHeight, requiredHeight));
     };
 
@@ -195,20 +106,12 @@ export const useExpertise = () => {
       minHeight: sectionMinHeight ? `${sectionMinHeight}px` : undefined,
       ...blurMaskStyle,
     } satisfies CSSProperties,
-    svgSize,
-    catOffsetPath,
-    catMotionStyles,
-    cardWrapperClass,
+    progress,
     isCardVisible,
     isSmallScreen,
     hasReachedKitty,
     showCallToAction,
     handleOpenRequest,
     onClose,
-    rows: {
-      first: firstRow,
-      second: secondRow,
-      third: thirdRow,
-    },
   };
 };
