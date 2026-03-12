@@ -51,7 +51,7 @@ export const useAnimationPath = ({
     return () => {
       window.removeEventListener("resize", updateTranslationLimits);
     };
-  }, []);
+  }, [picSize, sectionRef, treeRef]);
 
   const catOffsetPath = useMemo(() => {
     const { x, y } = maxTranslation;
