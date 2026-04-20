@@ -12,10 +12,10 @@ const Experience: React.FC = () => {
             date="December 2024 - Now"
             location="Remote"
             description={[
-              "Working on the company's flagship product - the BI system Foresight Analytical Platform.",
-              "Implemented comments for built-in spreadsheets, speeding up communication between our clients' employees by 30%.",
-              "Updated legacy tools and wrote PowerShell scripts for automation, reducing the time spent on tasks with legacy code by 15-20%.",
-              "Optimized queries in BI system reports, reducing query traffic by 21% (and up to 4x for some operations).",
+              "Optimized BI https requests by refactoring data fetching logic, reducing network traffic by over 20% and achieving up to a 4x performance gain on key operations.",
+              "Developed and launched a real-time commenting feature for spreadsheets within the BI platform, directly addressing client requests for improved collaboration.",
+              "Automated legacy deployment and build processes using PowerShell scripts, reducing manual setup time for developers working on older modules.",
+              "Contribute to the core development of the Foresight Analytical Platform, a BI system used by enterprise clients.",
             ]}
             stack={[
               "TypeScript",
@@ -28,15 +28,15 @@ const Experience: React.FC = () => {
             ]}
           />
           <JobPosition
-            title="Founding Engineer"
+            title="Founding Engineer (Part-time contract)"
             place="Persona"
             site="https://persona.bz"
             date="September 2024 — December 2024"
             location="Remote"
             description={[
-              "As part of a short-term collaboration, I worked on a new startup project: a smart AI system for matching candidates and employers.",
-              "Designed a new system design using Figma and implemented it using NextJs + React + Tailwind + NextUi.",
-              "Developed the front-end part of an internal product: a lead generation platform",
+              "Led the end-to-end development of the initial MVP, from creating the system design in Figma to implementation with Next.js, React, and Tailwind.",
+              "Built an internal lead generation tool that enabled the sales team to manage and track customer outreach, directly supporting early-stage growth.",
+              "Designed and implemented the AI interaction pipeline, defining how the core platform and internal tools interfaced with RAG models to ensure consistent and scalable data processing.",
             ]}
             stack={[
               "Figma",
@@ -55,12 +55,11 @@ const Experience: React.FC = () => {
             date="December 2023 — December 2024"
             location="Moscow, Russia"
             description={[
-              "Developed an internal project - Performance Management system applied in all branches of the bank;",
-              "Designed a new system of news notifications, raising the number of employees notified about changes and events in the bank to 81%;",
-              "Created UI for the new cash ordering system, reducing employee time spent on this business process by 60%;",
-              "Implemented a convenient UI theme mechanism into the project, reducing the time for developing new themes by 50%;",
-              "Increased project test coverage from 13% to 77% for units and from 34% to 93% for e2e;",
-              "Initiated the creation of new practices to accelerate the onboarding process for new employees."
+              "Drove a massive quality improvement initiative for the bank's internal Performance Management system, increasing unit test coverage from 13% to 77% and e2e coverage from 34% to 93%.",
+              "Developed the UI for a new cash ordering system, resulting in a 60% reduction in the time required for employees to complete the process.",
+              "Architected and implemented a dynamic theming system that cut the development time for new UI themes by 50%.",
+              "Built a news notification system that increased employee awareness of company events to 81%, as measured by internal reports.",
+              "Initiated and documented new onboarding practices, creating a standardized guide that helped new developers contribute to the project faster.",
             ]}
             stack={[
               "TypeScript",
@@ -71,21 +70,20 @@ const Experience: React.FC = () => {
               "Jest",
               "Cypress",
               "MaterialUI",
-              "ESLint"
+              "ESLint",
             ]}
           />
           <JobPosition
             title="Frontend Developer (React.js)"
             place="Infomaximum"
             site="https://infomaximum.com"
-            date="August 2022 — December 2023"
+            date="August 2020 — December 2023"
             location="Remote"
             description={[
-              "Developed company's main product - active BI-system named Proceset;",
-              "Became the main contributor to one of the key modules of Proceset - a system for building analytical reports. On the last day of work up to 40% of changes in the module were made by me;",
-              "Successfully migrated the report building system to a new architecture, which significantly expanded the possibilities of end users to customize the system;",
-              "Conducted major refactoring which allowed to reduce the amount of boilerplate code for new features in module by 80-85%;",
-              "Constantly consulted UI/UX designers on technical issues, which allowed to reduce time-to-market on tasks related to me by 16-20%."
+              "Led a major refactoring of a key analytics module, reducing boilerplate code for new features by over 80% and significantly improving developer productivity.",
+              "Migrated the core report-building system to a new, more flexible architecture, enabling new types of user customizations that were previously impossible.",
+              "Became the primary owner and contributor for the analytical reports module, responsible for both new feature development and architectural improvements.",
+              "Collaborated with UI/UX designers to refine technical requirements, reducing rework and contributing to a ~20% faster time-to-market for features.",
             ]}
             stack={[
               "Typescript",
@@ -95,7 +93,7 @@ const Experience: React.FC = () => {
               "AntDesign",
               "Css-in-js (Emotion)",
               "Jest",
-              "ESLint"
+              "ESLint",
             ]}
           />
         </div>
