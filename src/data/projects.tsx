@@ -1,5 +1,6 @@
 import ProcesetImage from "../assets/proceset_bi_pic.png";
 import ForesightImage from "../assets/foresight_analytics.png";
+import NoteKeeperImage from "../assets/notekeeper_console.png";
 import ProjectMaryImage from "../assets/project_mary.png";
 import PortfolioImage from "../assets/KittyPortfolio.jpg";
 import type { ProjectCardProps } from "../types";
@@ -113,6 +114,70 @@ const foresightArticle = (
           role-based access control (RBAC) and data lineage tracking at both the
           database and UI component levels, ensuring compliance with strict
           public sector data regulations.
+        </li>
+      </ul>
+    </section>
+  </>
+);
+
+const noteKeeperArticle = (
+  <>
+    <section className="mb-4">
+      <h3 className="text-3xl">Project Overview &amp; Motivation</h3>
+      <p>
+        <strong>NoteKeeper</strong> turns long tabletop role-playing game
+        recordings into timestamped transcripts and structured session recaps.
+        I built it to remove the repetitive work of reviewing three-to-five-hour
+        sessions by hand, so game masters can spend more time preparing the next
+        chapter while preserving the details that keep a campaign coherent.
+      </p>
+    </section>
+
+    <img
+      src={NoteKeeperImage}
+      alt="NoteKeeper terminal interface showing recordings, processing jobs, players, and a generated session recap"
+      className="w-full mb-8"
+    />
+
+    <section className="mb-4">
+      <h3 className="text-3xl">Processing Workflow</h3>
+      <p>
+        Recordings pass through a complete, reviewable pipeline: FFmpeg
+        normalizes and combines the source audio; WhisperX transcribes, aligns,
+        and diarizes the conversation; SpeechBrain-powered voice matching maps
+        anonymous speakers to known campaign participants; and uncertain or
+        guest speakers are resolved in a human review step. DeepSeek then turns
+        the verified transcript into a readable recap that can be previewed or
+        exported as Markdown.
+      </p>
+    </section>
+
+    <section className="mb-4">
+      <h3 className="text-3xl">Core Engineering Features</h3>
+      <ul>
+        <li className="mb-2">
+          <strong>Two Console Interfaces:</strong> A Textual terminal UI
+          provides an interactive workflow for everyday use, while a Typer and
+          Rich CLI exposes the same capabilities for scripting and automation.
+        </li>
+        <li className="mb-2">
+          <strong>Hexagonal Architecture:</strong> Domain rules and application
+          use cases are isolated from UI frameworks, persistence, and machine
+          learning integrations. Infrastructure adapters connect SQLite, the
+          filesystem, FFmpeg, WhisperX, and DeepSeek without coupling them to
+          the core business logic.
+        </li>
+        <li className="mb-2">
+          <strong>Recoverable Processing Jobs:</strong> Long-running audio and
+          machine-learning work is represented as explicit jobs with visible
+          progress, persisted state, warnings, and review checkpoints, making
+          multi-hour recordings manageable when processing is interrupted.
+        </li>
+        <li className="mb-2">
+          <strong>Campaign-Aware Local Storage:</strong> SQLite stores campaigns,
+          participants, voice samples, recordings, transcripts, speaker
+          mappings, and recaps locally, keeping every generated artifact tied
+          to its campaign context.
         </li>
       </ul>
     </section>
@@ -284,6 +349,24 @@ export const projects: ProjectCardProps[] = [
     ],
     content: foresightArticle,
     projectLink: "https://www.fsight.ru/en/platform/",
+  },
+  {
+    title: "NoteKeeper",
+    tags: ["python", "textual", "whisperx", "speechbrain", "deepseek"],
+    image: NoteKeeperImage,
+    stack: [
+      "Python 3.11",
+      "Textual",
+      "Typer / Rich",
+      "SQLite",
+      "FFmpeg",
+      "WhisperX",
+      "PyTorch / SpeechBrain",
+      "DeepSeek",
+      "Pydantic",
+    ],
+    content: noteKeeperArticle,
+    projectLink: "https://github.com/C0deCat/NoteKeeper",
   },
   {
     title: "Project Mary",
