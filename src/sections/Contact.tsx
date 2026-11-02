@@ -8,18 +8,29 @@ const Contact: React.FC = () => {
       id="contact"
       className="flex p-8 pb-20 min-h-[100vh] gap-8 flex-wrap justify-center"
     >
-      <div className="flex flex-col justify-center basis-lg">
+      <div className="flex flex-col justify-center basis-lg min-w-0">
         <div className={classNames(accentContainer, "p-5")}>
           <h2 className="text-2xl uppercase mb-2">
-            available for freelance and job opportunities
+            open to remote opportunities and relocation
           </h2>
           <p className="text-xl mb-2">
-            Have and exciting project or interesting opportunity?
+            Based in Almaty, Kazakhstan. Open to remote work or relocation
+            outside Russia and Belarus.
           </p>
-          <p className="text-xl">Contact me via email or message!</p>
+          <p className="text-xl">
+            Have an interesting frontend role or project? Contact me via email
+            or message.
+          </p>
         </div>
         <div className="text-2xl text-(--color-accent) p-5">
-          <p className="mb-2">smolkin.vlsl@gmail.com</p>
+          <p className="mb-2">
+            <a
+              href="mailto:smolkin.vlsl@gmail.com"
+              className="hover:underline break-all"
+            >
+              smolkin.vlsl@gmail.com
+            </a>
+          </p>
           <p className="mb-2">
             <a
               href="https://t.me/C0deCat"
@@ -37,7 +48,7 @@ const Contact: React.FC = () => {
               rel="noopener noreferrer"
               className="hover:underline"
             >
-              Github
+              GitHub
             </a>
           </p>
         </div>

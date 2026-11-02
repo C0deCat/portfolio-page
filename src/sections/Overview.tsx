@@ -1,65 +1,45 @@
-import { useEffect, useRef, useState } from "react";
 import catBonefire from "../assets/cat_bonefire.gif";
 import { LightSource } from "../components/LightSource";
 
 export const Overview: React.FC = () => {
-  const titleRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    const updateScale = () => {
-      const el = titleRef.current;
-      if (!el) return;
-
-      const viewportWidth = window.innerWidth;
-      const contentWidth = el.scrollWidth;
-      setScale(Math.min(1, viewportWidth / contentWidth));
-    };
-
-    updateScale();
-    window.addEventListener("resize", updateScale);
-    return () => window.removeEventListener("resize", updateScale);
-  }, []);
-
   return (
     <section
       id="overview"
-      className="flex flex-col items-center pt-8 pb-8 h-screen justify-between"
+      className="flex flex-col items-center px-6 py-8 h-svh min-h-[48rem] justify-between"
     >
-      <div className="w-full overflow-hidden flex justify-center">
+      <div className="w-full shrink-0 flex justify-center">
         <div
-          ref={titleRef}
           id="portfolio_title"
-          className="flex flex-col items-center whitespace-nowrap w-fit pr-8 pl-8"
-          style={{
-            transform: `scale(${scale})`,
-            transformOrigin: "top center",
-          }}
+          className="flex flex-col items-center w-full max-w-5xl text-center"
         >
-          <h2 className="text-5xl text-primary text-center lowercase w-full">
+          <p className="text-2xl sm:text-4xl text-primary lowercase">
             a tale of
-          </h2>
-          <h1 className="text-9xl text-primary text-center uppercase font-bitcount font-[350]">
+          </p>
+          <h1 className="text-[clamp(3rem,10vw,8rem)] leading-none text-primary uppercase font-bitcount font-[350] my-4">
             Vladislav
             <br />
-            <span className="text-(--color-primary) after:content-['.'] after:absolute">
-              S
-            </span>
+            <span className="text-(--color-primary)">Smolkin</span>
           </h1>
-          <h2 className="text-5xl text-primary text-center lowercase w-full text-wrap">
-            software engineer and frontend developer
-          </h2>
+          <p className="text-2xl sm:text-4xl text-primary">
+            Senior Frontend Engineer (React, BI, AI)
+          </p>
+          <p className="text-base sm:text-xl text-secondary max-w-3xl mt-4">
+            4 years building React interfaces for enterprise BI and fintech,
+            from analytical report builders to operational tools. I also build
+            Python applications with audio processing and AI/RAG workflows.
+          </p>
         </div>
       </div>
-      <div className="grow flex justify-center w-full [container-type:size]">
+      <div className="grow min-h-40 flex justify-center w-full [container-type:size]">
         <LightSource color="#ff9a00" left={74} top={68}>
           <img
             src={catBonefire}
+            alt="Pixel cat resting beside a campfire"
             className="pixelated block size-[100cqmin] object-contain"
           />
         </LightSource>
       </div>
-      <div className="text-5xl text-primary lowercase">
+      <div className="text-3xl sm:text-5xl text-primary lowercase">
         <a href="#expertise">Continue</a>
       </div>
     </section>

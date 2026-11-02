@@ -33,38 +33,46 @@ const Modal: React.FC<ModalProps> = ({
 
   const modal = useMemo(
     () => (
-      <div className="fixed inset-0 z-50 flex items-start p-5 justify-center">
+      <div
+        className="fixed inset-0 z-50 flex items-start p-3 sm:p-5 justify-center"
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+      >
         <div className={modalClasses}>
           <div className="border-corner h-full overflow-hidden flex flex-col">
             <button
               className="text-3xl leading-none absolute right-[10px] top-[10px] text-(--color-primary) cursor-pointer z-20"
               onClick={onClose}
+              aria-label="Close project"
             >
               <CloseIcon />
             </button>
-            <header className="top-0 flex flex-wrap justify-between items-center p-11 pt-7 border-(--color-primary) pr-32 z-10">
-              <h2 className="text-4xl pr-2">{title}</h2>
+            <header className="top-0 shrink-0 flex flex-wrap gap-2 justify-between items-center px-5 py-6 sm:px-11 sm:pt-7 border-(--color-primary) pr-12 sm:pr-16 z-10">
+              <h2 className="text-2xl sm:text-4xl pr-2">{title}</h2>
               {projectLink && (
                 <a
                   href={projectLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-2xl hover:underline"
+                  className="text-lg sm:text-2xl hover:underline"
                 >
                   open project {"-->"}
                 </a>
               )}
             </header>
-            <div className="pr-11 pl-11 pb-11 overflow-auto text-2xl">
-              <aside className="sm:float-right min-w-[170px] bg-(--color-secondary) ml-4 mb-4 back p-4">
-                <p className="mb-4 underline">Stack</p>
-                <ul>
-                  {stack.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </aside>
-              <div>{content}</div>
+            <div className="min-h-0 px-5 pb-6 sm:px-11 sm:pb-11 overflow-auto text-lg sm:text-2xl">
+              <div className="grid md:grid-cols-[minmax(0,1fr)_minmax(10rem,28%)] gap-6 items-start">
+                <div className="min-w-0">{content}</div>
+                <aside className="min-w-0 bg-(--color-secondary) p-4 break-words">
+                  <p className="mb-4 underline">Stack</p>
+                  <ul>
+                    {stack.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </aside>
+              </div>
             </div>
           </div>
         </div>

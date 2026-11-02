@@ -1,4 +1,6 @@
 import JobPosition from "../components/JobPosition";
+import { defaultContainer } from "../stylizers";
+import classNames from "classnames";
 
 const Experience: React.FC = () => {
   return (
@@ -9,13 +11,13 @@ const Experience: React.FC = () => {
             title="React Developer"
             place="Foresight"
             site="https://fsight.ru/en"
-            date="December 2024 - Now"
+            date="December 2024 — Present"
             location="Remote"
             description={[
-              "Optimized BI https requests by refactoring data fetching logic, reducing network traffic by over 20% and achieving up to a 4x performance gain on key operations.",
-              "Developed and launched a real-time commenting feature for spreadsheets within the BI platform, directly addressing client requests for improved collaboration.",
+              "Refactored BI data fetching, reducing network traffic by over 20% and making key operations up to 4 times faster.",
+              "Built real-time spreadsheet comments, new infographic components, cross-component data synchronization, and other spreadsheet improvements requested by clients.",
               "Automated legacy deployment and build processes using PowerShell scripts, reducing manual setup time for developers working on older modules.",
-              "Contribute to the core development of the Foresight Analytical Platform, a BI system used by enterprise clients.",
+              "Implemented full support for new data source types in the reporting UI, expanding the data available for analytical reports.",
             ]}
             stack={[
               "TypeScript",
@@ -24,7 +26,7 @@ const Experience: React.FC = () => {
               "Jest",
               "Storybook",
               "ESLint",
-              "Java (legacy code)",
+              "PowerShell",
             ]}
           />
           <JobPosition
@@ -34,18 +36,17 @@ const Experience: React.FC = () => {
             date="September 2024 — December 2024"
             location="Remote"
             description={[
-              "Led the end-to-end development of the initial MVP, from creating the system design in Figma to implementation with Next.js, React, and Tailwind.",
+              "Led the initial MVP for an AI-powered candidate and employer matching startup, from system design in Figma to implementation with Next.js, React, and Tailwind CSS.",
               "Built an internal lead generation tool that enabled the sales team to manage and track customer outreach, directly supporting early-stage growth.",
               "Designed and implemented the AI interaction pipeline, defining how the core platform and internal tools interfaced with RAG models to ensure consistent and scalable data processing.",
             ]}
             stack={[
               "Figma",
               "TypeScript",
-              "NextJs",
+              "Next.js",
               "Node.js",
               "React",
-              "Tailwind",
-              "NextUi",
+              "Tailwind CSS",
             ]}
           />
           <JobPosition
@@ -55,7 +56,7 @@ const Experience: React.FC = () => {
             date="December 2023 — December 2024"
             location="Moscow, Russia"
             description={[
-              "Drove a massive quality improvement initiative for the bank's internal Performance Management system, increasing unit test coverage from 13% to 77% and e2e coverage from 34% to 93%.",
+              "Increased unit test coverage from 13% to 77% and e2e coverage from 34% to 93% for the bank's internal Performance Management system.",
               "Developed the UI for a new cash ordering system, resulting in a 60% reduction in the time required for employees to complete the process.",
               "Architected and implemented a dynamic theming system that cut the development time for new UI themes by 50%.",
               "Built a news notification system that increased employee awareness of company events to 81%, as measured by internal reports.",
@@ -69,7 +70,7 @@ const Experience: React.FC = () => {
               "Redux-saga",
               "Jest",
               "Cypress",
-              "MaterialUI",
+              "Material UI",
               "ESLint",
             ]}
           />
@@ -86,16 +87,40 @@ const Experience: React.FC = () => {
               "Collaborated with UI/UX designers to refine technical requirements, reducing rework and contributing to a ~20% faster time-to-market for features.",
             ]}
             stack={[
-              "Typescript",
+              "TypeScript",
               "React",
               "MobX",
               "GraphQL",
-              "AntDesign",
-              "Css-in-js (Emotion)",
+              "Ant Design",
+              "CSS-in-JS (Emotion)",
               "Jest",
               "ESLint",
             ]}
           />
+          <div className={classNames(defaultContainer(), "p-4 mt-8")}>
+            <h2 className="text-2xl uppercase mb-4">Education</h2>
+            <div className="flex flex-col gap-5">
+              <div>
+                <h3 className="text-xl">Bachelor's degree in Computer Science</h3>
+                <p className="text-secondary">2023 — Present · In progress</p>
+                <p>Peter the Great St. Petersburg Polytechnic University</p>
+                <p className="text-secondary">Remote · Saint Petersburg, Russia</p>
+              </div>
+              <div>
+                <h3 className="text-xl">Associate's degree in Computer Science</h3>
+                <p className="text-secondary">2021</p>
+                <p>Saransk State Industrial and Economic College</p>
+                <p className="text-secondary">Saransk, Russia</p>
+              </div>
+            </div>
+          </div>
+          <div className={classNames(defaultContainer(), "p-4")}>
+            <h2 className="text-2xl uppercase mb-4">Languages</h2>
+            <ul className="flex flex-col sm:flex-row gap-3 sm:gap-8 text-lg">
+              <li>Russian — Native</li>
+              <li>English — C1, professional working proficiency</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>

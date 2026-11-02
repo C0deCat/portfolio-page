@@ -4,53 +4,38 @@ import NoteKeeperImage from "../assets/notekeeper_console.png";
 import ProjectMaryImage from "../assets/project_mary.png";
 import PortfolioImage from "../assets/KittyPortfolio.jpg";
 import type { ProjectCardProps } from "../types";
+import { unorderedList } from "../stylizers";
 
 const procesetArticle = (
   <>
-    <header className="mb-4 text-3xl">
-      <p>Active Business Intelligence & Enterprise Process Mining Platform</p>
-    </header>
-
-    <section className="mb-4">
-      <h4 className="text-3xl">Project Overview & Business Value</h4>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">The Product</h3>
       <p>
-        <strong>Proceset</strong> is an enterprise-grade process mining and
-        active business intelligence platform developed by Infomaximum. Deployed
-        across major corporate entities, the system shifts organizational focus
-        from traditional retrospective reporting to active, real-time analytics.
-        By algorithmically parsing massive event logs from underlying IT systems
-        (ERPs, CRMs), Proceset dynamically reconstructs and visualizes the
-        actual flow of corporate operations. This enables enterprises to
-        identify hidden bottlenecks, compliance deviations, and inefficiencies,
-        ultimately driving significant operational optimization and cost
-        reduction.
+        <strong>Proceset</strong> is Infomaximum's BI and process analytics
+        platform. I worked on its analytical reports module, building interfaces
+        that let users configure and explore their business data.
       </p>
     </section>
-
-    <img src={ProcesetImage} alt="Proceset" className="w-full mb-8" />
-
+    <img src={ProcesetImage} alt="Proceset analytical report interface" className="w-full mb-8" />
     <section>
-      <h4 className="text-3xl">Core Features & Engineering Complexity</h4>
-      <ul>
-        <li className="mb-2">
-          <strong>Advanced Process Visualization:</strong> The platform
-          leverages highly interactive Directed Follows Graphs (DFGs) and
-          time-dependent animated Sankey diagrams to map complex, high-volume
-          operational workflows. This requires rendering thousands of dynamic
-          vector nodes concurrently without degrading browser performance.
+      <h3 className="text-3xl mb-2">My Contribution</h3>
+      <ul className={unorderedList}>
+        <li className="mb-3">
+          Refactored a key analytics module, reducing boilerplate for new features
+          by over 80%.
         </li>
-        <li className="mb-2">
-          <strong>TaskMining & Digital Workers:</strong> Beyond system-level
-          logs, the platform features AI-driven TaskMining to analyze
-          micro-level user interactions. It allows business users to configure
-          autonomous "digital workers" via complex visual API mapping interfaces
-          to automate routine operational tasks.
+        <li className="mb-3">
+          Migrated the report-building system to a more flexible architecture,
+          enabling user customizations that the previous implementation could
+          not support.
         </li>
-        <li className="mb-2">
-          <strong>Modular Extensibility:</strong> A robust widget API allows for
-          the dynamic injection of bespoke, highly customized analytical
-          components into the global dashboard layout, ensuring the platform
-          scales to meet niche enterprise requirements safely.
+        <li className="mb-3">
+          Became the primary owner of the analytical reports module, responsible
+          for new features and architectural improvements.
+        </li>
+        <li>
+          Worked with UI/UX designers to clarify technical requirements and
+          reduce rework, contributing to roughly 20% faster feature delivery.
         </li>
       </ul>
     </section>
@@ -59,61 +44,37 @@ const procesetArticle = (
 
 const foresightArticle = (
   <>
-    <header className="mb-4">
-      <h3 className="text-3xl">Foresight Analytics Platform</h3>
-      <p className="text-xl">
-        Enterprise Multidimensional Analysis & Headless BI Architecture
-      </p>
-    </header>
-
-    <section className="mb-4">
-      <h4 className="text-3xl">Project Overview & Business Value</h4>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">The Product</h3>
       <p>
-        The <strong>Foresight Analytics Platform</strong> is a comprehensive,
-        enterprise-grade Business Intelligence suite engineered for
-        massive-scale data operations. Included in the Unified Register of
-        Russian Programs, it serves as a foundational element for corporate
-        import substitution initiatives. The platform goes beyond standard
-        visualization, providing deeply integrated solutions for corporate
-        budgeting, complex financial consolidation, predictive machine learning
-        models, and multidimensional online analytical processing (MOLAP).
+        The <strong>Foresight Analytical Platform</strong> is an enterprise BI
+        system. My work focuses on the React reporting UI, spreadsheet
+        interactions, and data fetching for analytical workflows.
       </p>
     </section>
-
     <img
       src={ForesightImage}
-      alt="Foresight Analytics Platform"
+      alt="Foresight Analytical Platform reporting interface"
       className="w-full mb-8"
     />
-
-    <section className="mb-4">
-      <h4 className="text-3xl">Core Features & Engineering Complexity</h4>
-      <ul>
-        <li className="mb-2">
-          <strong>High-Performance Data Processing:</strong> The platform is
-          built on advanced in-memory data caching mechanisms and distributed
-          parallel processing, enabling real-time analysis across massive
-          enterprise data warehouses and data lakes.
+    <section>
+      <h3 className="text-3xl mb-2">My Contribution</h3>
+      <ul className={unorderedList}>
+        <li className="mb-3">
+          Refactored BI data fetching, reducing network traffic by over 20% and
+          making key operations up to 4 times faster.
         </li>
-        <li className="mb-2">
-          <strong>Geospatial SVG Topobases:</strong> Features advanced
-          geospatial analytical capabilities using strictly governed SVG XML
-          schemas. This allows dynamic, multidimensional OLAP cube data to be
-          bound directly to interactive regional map geometries for complex
-          drill-down capabilities.
+        <li className="mb-3">
+          Built real-time spreadsheet comments, new infographic components, and
+          cross-component data synchronization in response to client requests.
         </li>
-        <li className="mb-2">
-          <strong>Headless SPA Integrations:</strong> While featuring a
-          proprietary DHTML component library for standard reporting, the system
-          supports modern "headless" operations. Data can be exposed securely
-          via robust REST APIs to power decoupled, custom Single Page
-          Applications (SPAs) built in React or Angular.
+        <li className="mb-3">
+          Added full reporting UI support for new data source types, expanding
+          the data users could include in analytical reports.
         </li>
-        <li className="mb-2">
-          <strong>Enterprise Governance & Security:</strong> Enforces rigorous
-          role-based access control (RBAC) and data lineage tracking at both the
-          database and UI component levels, ensuring compliance with strict
-          public sector data regulations.
+        <li>
+          Automated legacy builds and deployment with PowerShell to reduce
+          manual setup for developers working on older modules.
         </li>
       </ul>
     </section>
@@ -122,62 +83,65 @@ const foresightArticle = (
 
 const noteKeeperArticle = (
   <>
-    <section className="mb-4">
-      <h3 className="text-3xl">Project Overview &amp; Motivation</h3>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">The Problem</h3>
       <p>
-        <strong>NoteKeeper</strong> turns long tabletop role-playing game
-        recordings into timestamped transcripts and structured session recaps.
-        I built it to remove the repetitive work of reviewing three-to-five-hour
-        sessions by hand, so game masters can spend more time preparing the next
-        chapter while preserving the details that keep a campaign coherent.
+        I run tabletop role-playing games, where a session can last three to five
+        hours. <strong>NoteKeeper</strong> turns those recordings into timestamped
+        transcripts and structured recaps, reducing the repetitive work of
+        reviewing a session and writing notes for the next game.
       </p>
     </section>
-
     <img
       src={NoteKeeperImage}
       alt="NoteKeeper terminal interface showing recordings, processing jobs, players, and a generated session recap"
       className="w-full mb-8"
     />
-
-    <section className="mb-4">
-      <h3 className="text-3xl">Processing Workflow</h3>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">How It Works</h3>
       <p>
-        Recordings pass through a complete, reviewable pipeline: FFmpeg
-        normalizes and combines the source audio; WhisperX transcribes, aligns,
-        and diarizes the conversation; SpeechBrain-powered voice matching maps
-        anonymous speakers to known campaign participants; and uncertain or
-        guest speakers are resolved in a human review step. DeepSeek then turns
-        the verified transcript into a readable recap that can be previewed or
-        exported as Markdown.
+        Create a campaign, add participants and voice samples, then submit a
+        recording. FFmpeg prepares the audio; WhisperX transcribes, aligns, and
+        diarizes speech. Sample-based speaker mapping with manual review links
+        anonymous speakers to participants or guest labels before DeepSeek
+        generates the recap. Transcripts and recaps can be previewed and exported
+        as Markdown from either the Textual TUI or the Typer/Rich CLI.
       </p>
     </section>
-
-    <section className="mb-4">
-      <h3 className="text-3xl">Core Engineering Features</h3>
-      <ul>
-        <li className="mb-2">
-          <strong>Two Console Interfaces:</strong> A Textual terminal UI
-          provides an interactive workflow for everyday use, while a Typer and
-          Rich CLI exposes the same capabilities for scripting and automation.
+    <section>
+      <h3 className="text-3xl mb-2">Engineering Decisions</h3>
+      <ul className={unorderedList}>
+        <li className="mb-3">
+          <strong>Process-based job queue:</strong> Heavy processing runs in
+          separate operating-system processes. Shared capacity limits control
+          total and GPU jobs, while progress events, cancellation, and restarts
+          make long-running work manageable. Speaker review pauses the pipeline
+          and continues from the saved transcript after corrections.
         </li>
-        <li className="mb-2">
-          <strong>Hexagonal Architecture:</strong> Domain rules and application
-          use cases are isolated from UI frameworks, persistence, and machine
-          learning integrations. Infrastructure adapters connect SQLite, the
-          filesystem, FFmpeg, WhisperX, and DeepSeek without coupling them to
-          the core business logic.
+        <li className="mb-3">
+          <strong>Long-transcript summarization:</strong> Token-budgeted chunks
+          are summarized separately and combined into a final recap. Intermediate
+          recaps retain time ranges and source segment references. API calls
+          include timeouts, retries with exponential backoff, and request logging.
         </li>
-        <li className="mb-2">
-          <strong>Recoverable Processing Jobs:</strong> Long-running audio and
-          machine-learning work is represented as explicit jobs with visible
-          progress, persisted state, warnings, and review checkpoints, making
-          multi-hour recordings manageable when processing is interrupted.
+        <li className="mb-3">
+          <strong>Sample-based speaker mapping:</strong> The mapper uses overlap
+          with known voice-sample intervals to associate diarized labels with
+          participants. Uncertain or conflicting mappings are reviewed by the
+          user before recap generation.
         </li>
-        <li className="mb-2">
-          <strong>Campaign-Aware Local Storage:</strong> SQLite stores campaigns,
-          participants, voice samples, recordings, transcripts, speaker
-          mappings, and recaps locally, keeping every generated artifact tied
-          to its campaign context.
+        <li className="mb-3">
+          <strong>Local workspaces and roles:</strong> SQLite-backed workspaces
+          separate campaign data and support owner, editor, and viewer access
+          within the local application. Workspace settings select allowed models
+          and processing options; campaign settings control recap prompts.
+        </li>
+        <li>
+          <strong>A shared, testable core:</strong> CLI and TUI call the same
+          application use cases. Ports and adapters isolate domain rules from
+          SQLite, the filesystem, audio tools, and model APIs. Automated tests
+          cover use cases, adapters, interfaces, workspace isolation, and
+          architectural boundaries.
         </li>
       </ul>
     </section>
@@ -186,113 +150,56 @@ const noteKeeperArticle = (
 
 const projectMaryArticle = (
   <>
-    <section className="mb-4">
-      <h3 className="text-3xl">Overview</h3>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">The Problem</h3>
       <p>
-        While initially conceived as a persona-driven Telegram companion bot (as
-        described in its early documentation), Project Mary evolved during
-        development into a highly modular{" "}
-        <strong>framework for building advanced AI chatbots</strong>. By
-        decoupling core responsibilities—such as transport, memory, and language
-        generation—into distinct, pluggable interfaces, the project serves as a
-        scalable foundation for deploying sophisticated virtual agents with
-        persistent memory and built-in monetization.
+        An AI companion needs to maintain a consistent persona and remember
+        earlier conversations beyond a single context window. I built
+        <strong> Project Mary</strong> as an asynchronous Telegram companion with
+        configurable personas, long-term memory, and optional paid access.
       </p>
     </section>
     <img
       src={ProjectMaryImage}
-      alt="Project Mary"
-      className="block mx-auto mb-8 w-[clamp(50%,650px,100%)]"
+      alt="Project Mary Telegram companion conversation"
+      className="block mx-auto mb-8 w-full max-w-[650px]"
     />
-    <section className="mb-4">
-      <h3 className="text-3xl">Key Architectural Features</h3>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">How It Works</h3>
       <p>
-        Instead of hardcoding a single-purpose script, the project is structured
-        around clear abstractions and dependency injection, making it highly
-        extensible:
+        Incoming Telegram messages pass through an asynchronous conversation
+        orchestrator. It retrieves relevant memories, adds persona instructions,
+        requests a response from DeepSeek, and queues the reply for delivery.
+        Conversation history feeds the memory layer, while subscriptions, message
+        packs, and free quotas determine access through Telegram Stars.
       </p>
     </section>
-
-    <section className="mb-4">
-      <ul>
-        <li className="mb-2">
-          <strong>
-            Agnostic Transport Layer (<code>messenger</code> module):
-          </strong>{" "}
-          Built around the <code>IMessengerApp</code> protocol, the framework
-          decouples the core conversational logic from the underlying messaging
-          platform. While it currently ships with robust Telegram integrations
-          (supporting both <code>python-telegram-bot</code> for webhooks and{" "}
-          <code>Telethon</code>), developers can easily plug in adapters for
-          Discord, WhatsApp, or custom frontends. A high-level{" "}
-          <code>Messenger</code> orchestrator sits above the adapter to handle
-          message queuing, natural typing emulation, delay enforcement, and
-          automated retry logic for failed requests.
+    <section>
+      <h3 className="text-3xl mb-2">Engineering Decisions</h3>
+      <ul className={unorderedList}>
+        <li className="mb-3">
+          <strong>Hierarchical vector memory:</strong> LangChain and Milvus store
+          conversation fragments and progressively summarized history. Local
+          SentenceTransformer embeddings support retrieval, with Milvus Lite and
+          Standalone deployment options.
         </li>
-        <li className="mb-2">
-          <strong>
-            Pluggable LLM Interface (<code>persona</code> module):
-          </strong>{" "}
-          Language model providers are abstracted behind the{" "}
-          <code>ILanguageModel</code> interface. The framework currently
-          supports DeepSeek (via OpenAI compatible endpoints), NLPCloud, and a
-          Mock model for unit testing. The <code>Persona</code> class
-          dynamically constructs prompts by injecting configurable character
-          traits, biographies, and boundaries from a JSON preset.
+        <li className="mb-3">
+          <strong>Asynchronous delivery:</strong> A messenger abstraction
+          separates Telegram transport from conversation logic. Per-user message
+          queues, delivery delays, typing simulation, and retries handle outgoing
+          replies.
         </li>
-        <li className="mb-2">
-          <strong>
-            Hierarchical Vector Memory System (<code>memory</code> module):
-          </strong>{" "}
-          To solve the context-window limitations of modern LLMs, I engineered a
-          sophisticated, multi-tiered long-term memory system using LangChain
-          and Milvus (supporting both Lite and Standalone modes). The system
-          automatically manages conversation history through progressive
-          summarization:
-          <ul>
-            <li>
-              <strong>L0 (Raw):</strong> Exact conversation fragments stored as
-              embeddings using local <code>SentenceTransformers</code>.
-            </li>
-            <li>
-              <strong>L1 (Recent):</strong> Automated summaries of recent
-              message batches.
-            </li>
-            <li>
-              <strong>L2 (Rollups):</strong> Aggregated summaries of older L1
-              chunks.
-            </li>
-            <li>
-              <strong>Global:</strong> A continuously updated, overarching
-              summary of the user's profile, preferences, and relationship with
-              the bot.
-            </li>
-          </ul>
+        <li className="mb-3">
+          <strong>Modular integrations:</strong> Separate persona, language-model,
+          memory, messaging, and payment modules keep their responsibilities
+          explicit. Persona traits and memory behavior are configurable.
         </li>
-        <li className="mb-2">
-          <strong>
-            Asynchronous Conversation Orchestrator (<code>agent</code> module):
-          </strong>{" "}
-          At the heart of the framework is an async state machine that manages
-          concurrent user interactions. It gracefully handles edge cases like
-          overlapping messages, pauses response generation when the user starts
-          typing, and enforces "grace periods" to ensure the bot reads multiple
-          rapid-fire messages as a single context block. It also features a
-          CRON-like scheduler for asynchronous broadcasts (e.g., automated
-          morning/evening greetings).
-        </li>
-        <li className="mb-2">
-          <strong>
-            Built-In Monetization &amp; Meta-Storage (<code>payments</code>{" "}
-            &amp; <code>metamemory</code>):
-          </strong>{" "}
-          The framework includes a pluggable <code>MetadataController</code>{" "}
-          (backed by SQLite or JSON) to track user states, timezones, and
-          quotas. Built on top of this is a fully integrated{" "}
-          <code>PaymentService</code> that supports Telegram Stars
-          out-of-the-box, allowing developers to easily configure monthly
-          subscriptions, consumable token packs, and free-tier limits with
-          automated paywall generation.
+        <li>
+          <strong>Access and persistence:</strong> Telegram Stars payments support
+          subscriptions and consumable message packs. SQLite or JSON storage
+          tracks user state and quotas; Docker Compose assembles the bot and
+          Milvus services. Pytest tests cover agent, memory, messaging, and payment
+          behavior.
         </li>
       </ul>
     </section>
@@ -301,17 +208,19 @@ const projectMaryArticle = (
 
 const myPortfolioSiteArticle = (
   <>
-    <section className="mb-4">
-      <h3 className="text-3xl">Overview</h3>
+    <section className="mb-6">
+      <h3 className="text-3xl mb-2">The Idea</h3>
       <p>
-        This is my personal portfolio website, built to showcase my projects and
-        experience.
+        My personal portfolio brings together frontend work, Python projects, and
+        professional experience in a pixel-art world of cats.
       </p>
     </section>
     <section>
+      <h3 className="text-3xl mb-2">Implementation</h3>
       <p>
-        I mean, this thing kind of speak for itself, just feel free to look
-        around :D
+        Built with React, TypeScript, Vite, and Tailwind CSS, with an animated
+        character card, parallax backgrounds, project dialogs, and a switchable
+        CRT effect. Feel free to explore!
       </p>
     </section>
   </>
@@ -320,64 +229,53 @@ const myPortfolioSiteArticle = (
 export const projects: ProjectCardProps[] = [
   {
     title: "Proceset",
-    tags: ["react", "typescript", "MobX", "css-in-js"],
+    summary: "BI report builders and a more flexible analytics module at Infomaximum.",
+    tags: ["react", "typescript", "mobx", "css-in-js"],
     image: ProcesetImage,
     stack: [
-      "React",
-      "TypeScript",
-      "MobX",
-      "CSS-in-JS (Emotion)",
-      "GraphQL",
-      "Ant Design",
-      "Jest",
+      "React", "TypeScript", "MobX", "CSS-in-JS (Emotion)",
+      "GraphQL", "Ant Design", "Jest",
     ],
     content: procesetArticle,
     projectLink: "https://infomaximum.ru/product",
   },
   {
     title: "Foresight Analytical Platform",
+    summary: "Enterprise BI reporting, spreadsheet collaboration, and faster data fetching.",
     tags: ["typescript", "react", "redux", "jest", "storybook"],
     image: ForesightImage,
-    stack: [
-      "TypeScript",
-      "React",
-      "Redux",
-      "Jest",
-      "Storybook",
-      "ESLint",
-      "Java (legacy code)",
-    ],
+    stack: ["TypeScript", "React", "Redux", "Jest", "Storybook", "ESLint", "PowerShell"],
     content: foresightArticle,
     projectLink: "https://www.fsight.ru/en/platform/",
   },
   {
     title: "NoteKeeper",
-    tags: ["python", "textual", "whisperx", "speechbrain", "deepseek"],
+    summary: "My main personal project: a Python app that turns tabletop recordings into transcripts and AI session recaps.",
+    tags: ["python", "textual", "whisperx", "sqlite", "deepseek"],
     image: NoteKeeperImage,
     stack: [
-      "Python 3.11",
-      "Textual",
-      "Typer / Rich",
-      "SQLite",
-      "FFmpeg",
-      "WhisperX",
-      "PyTorch / SpeechBrain",
-      "DeepSeek",
-      "Pydantic",
+      "Python 3.11", "Textual", "Typer / Rich", "SQLite", "FFmpeg",
+      "WhisperX", "PyTorch", "DeepSeek", "tiktoken", "Pydantic", "pytest",
     ],
     content: noteKeeperArticle,
     projectLink: "https://github.com/C0deCat/NoteKeeper",
   },
   {
     title: "Project Mary",
-    tags: ["python", "langchain", "milvus", "deepseek_r1", "telegram-bot-api"],
+    summary: "An async Telegram AI companion with long-term vector memory and Telegram Stars payments.",
+    tags: ["python", "langchain", "milvus", "deepseek", "telegram"],
     image: ProjectMaryImage,
-    stack: ["Python", "LangChain", "Milvus", "DeepSeek-R1", "Telegram Bot API"],
+    stack: [
+      "Python", "asyncio", "LangChain", "Milvus", "SentenceTransformers",
+      "DeepSeek", "Telethon / python-telegram-bot", "Telegram Stars",
+      "SQLite", "Docker Compose", "pytest",
+    ],
     content: projectMaryArticle,
     projectLink: "https://github.com/C0deCat/project-mary",
   },
   {
     title: "This exact portfolio site",
+    summary: "A React portfolio with pixel cats, parallax scenes, and an optional CRT effect.",
     tags: ["react", "vite", "tailwind", "typescript"],
     image: PortfolioImage,
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS"],

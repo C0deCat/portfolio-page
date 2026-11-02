@@ -7,6 +7,7 @@ import { projects } from "../data/projects";
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   title,
+  summary,
   tags,
   image,
   stack,
@@ -17,7 +18,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const cardClasses = classNames(
     defaultContainer(),
-    "overflow-hidden flex flex-col basis-3xs h-fit",
+    "overflow-hidden flex flex-col basis-3xs min-w-0 h-fit",
   );
 
   return (
@@ -31,6 +32,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
         <div className="p-2">
           <h3 className="text-xl text-primary">{title}</h3>
+          {summary && <p className="text-base my-2">{summary}</p>}
           <ul className="flex flex-wrap gap-2 text-secondary text-sm mb-2">
             {tags.map((tag) => (
               <li key={tag}>#{tag}</li>

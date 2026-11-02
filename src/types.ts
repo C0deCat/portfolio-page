@@ -2,6 +2,7 @@ import React from "react";
 
 export interface ProjectCardProps {
   title: string;
+  summary?: string;
   tags: string[];
   image: string;
   stack: string[];

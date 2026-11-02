@@ -22,8 +22,8 @@ const JobPosition: React.FC<JobPositionProps> = ({
   stack,
 }) => {
   const header = (
-    <div className="flex justify-between w-full">
-      <div>
+    <div className="flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4 w-full">
+      <div className="min-w-0">
         {title} |{" "}
         <a
           href={site}
@@ -35,7 +35,7 @@ const JobPosition: React.FC<JobPositionProps> = ({
           {place}
         </a>
       </div>
-      <span>{date}</span>
+      <span className="text-base sm:text-lg shrink-0">{date}</span>
     </div>
   );
 
@@ -49,9 +49,9 @@ const JobPosition: React.FC<JobPositionProps> = ({
           </li>
         ))}
       </ul>
-      <p className="text-base text-secondary">
+      <p className="flex flex-wrap gap-x-2 gap-y-1 text-base text-secondary">
         {stack.map((item) => (
-          <span key={item} className="mr-2">{`#${item}`}</span>
+          <span key={item}>{`#${item}`}</span>
         ))}
       </p>
     </div>

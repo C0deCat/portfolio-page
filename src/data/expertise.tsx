@@ -4,58 +4,55 @@ import React from "react";
 export const expertiseContent: Record<string, React.ReactNode> = {
   "Character Info": (
     <p>
-      name: Vladislav S.
+      name: Vladislav Smolkin
       <br />
       status: Open to work
       <br />
-      experience: 5+ years
+      experience: 4 years
       <br />
-      titles: Software Engineer, Frontend Developer, Excellent Problem Solver
+      role: Senior Frontend Engineer
+      <br />
+      focus: React, BI, AI
     </p>
   ),
   Frontend: (
     <>
-      Basics:
+      Languages & frameworks:
       <ul className={unorderedList}>
-        <li>TypeScript, HTML, CSS, JS, Python, C#, Java, Figma</li>
+        <li>TypeScript, JavaScript, React, Next.js, HTML, CSS/SCSS</li>
       </ul>
-      JS frameworks:
+      State & data:
       <ul className={unorderedList}>
-        <li>Vast experience with React + Redux or MobX</li>
-        <li>Some experience with Node.js</li>
-        <li>Knowledge of Vue, Angular, Next</li>
+        <li>Redux, MobX, GraphQL</li>
+        <li>Analytical report builders and complex BI interfaces</li>
       </ul>
       Testing:
       <ul className={unorderedList}>
-        <li>e2e: cypress, storybook</li>
-        <li>unit: jest, react testing library</li>
+        <li>Jest (unit), Cypress (e2e), Storybook (UI development)</li>
       </ul>
-      Others:
+      Tools:
       <ul className={unorderedList}>
-        <li>GraphQL, Tailwind, Recharts, Docker, Webpack, Vite</li>
-        <li>Telethon, Milvus, Langchain</li>
-        <li>And so on...</li>
+        <li>Git, Docker, Webpack, Vite, Tailwind CSS</li>
       </ul>
     </>
   ),
   "Software Engineer": (
     <>
-      Experience in functional and OOP:
+      Engineering practices:
       <ul className={unorderedList}>
-        <li>JavaScript</li>
-        <li>TypeScript</li>
-        <li>Python</li>
-        <li>C#</li>
-        <li>Java</li>
+        <li>System design, SOLID, TDD, CI/CD</li>
+        <li>Legacy migrations and performance optimization</li>
+        <li>Node.js, SQL</li>
       </ul>
     </>
   ),
   Miscellaneous: (
     <>
-      Beside my main focus I'm also have knowledge in:
+      Python & AI personal projects:
       <ul className={unorderedList}>
-        <li>backend development (Node.js)</li>
-        <li>AI Integration (Milvus, Langchain)</li>
+        <li>SQLite, audio processing, background processes</li>
+        <li>LLM integration, LangChain, Milvus vector memory</li>
+        <li>CLI/TUI applications, ports and adapters, pytest</li>
       </ul>
     </>
   ),
